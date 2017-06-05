@@ -1,0 +1,15 @@
+language: python
+python:
+- '2.7'
+install:
+- pip install pypandoc
+- apt-get install pandoc
+- python setup.py -q install
+deploy:
+  provider: releases
+  api_key:
+    secure: jRh/1cgeplMywOkLHfH5nJv3LCPfKCwGUmkdoy/ygHSXcnUCwroFe4LhsHF35+Assc+csL88WNTWpy5t9wPVCNW2+/vvHSErd62+hKQP6ZwGXRwBeyF6cCnYUrg38x0abCKyNPJX28jaLD/wc0s1kzmbuH6dmiE5d/DU2z0SwGWQjN8yYqTNBelBQIp7tVkYFxDgR+TzYa4W/TvGLMuBxDbDTnOuQeeFxGA6UA+V6SLZ4MJwjq1Im74SZZx/V8tV+y/BUIC3MuFRDsPJPTUrekYFhPcuTorlbbBznGc15MmHsYVupno0qAAv44uCs/2UNyS1ITWTSB+5WVoyZD/Or6xTjUtR1Pa5UYksKOuI8CkTOjn/nj3Q/hAcjvNL+GZK7P2VdyWPTaKZ9tCTyvg+dDk0qQlYzKUcLmJMubciH9oACanxKo/8w5b5kaK2td28EPot8ZTnhEjygdVqGNxVNaSqxal034X4L174Ili/2wjnNC7Q5byWBj1+8Jw/mRzJ/yxSXluKoczn3EFsbV3IYBOoX6etF7wPMNhwYavbV9i3DEkTfh2TPCoyi6BNSEheCZZtJfCIoaDlnBJmh2Gz0mrJphp8giXANOdhzHPyQ96yUjCXGpKYnnN0gq+jQHwk6Yh++WVC5FpPCYe88ud2EOIQtZ8GLJuqOMHfTXMhQ7A=
+  file: dist/*.tar.gz
+  on:
+    tags: true
+    repo: halkeye/ac-flask

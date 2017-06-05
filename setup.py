@@ -9,7 +9,7 @@ except ImportError:
 setup(
     name='Flask-AC',
     version='0.0.1',
-    url='https://github.com/halkeye/flask-ac/',
+    url='https://github.com/halkeye/ac-flask/',
     license='Apache License, Version 2.0',
     author='Gavin Mogan',
     author_email='opensource@gavinmogan.com',
