@@ -2,8 +2,15 @@ sudo: false
 language: python
 python:
 - '2.7'
+addons:
+  apt:
+    packages:
+      - pandoc
 install:
+- curl https://bootstrap.pypa.io/get-pip.py -sSf | python
+- pip install pypandoc
 - python setup.py -q install
+- python setup.py sdist
 deploy:
   provider: releases
   api_key:

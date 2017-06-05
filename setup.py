@@ -19,12 +19,12 @@ setup(
     packages=['ac_flask', 'tests'],
     platforms='any',
     install_requires=[
-        'Flask==0.12.2',
+        'Flask',
         'requests',
         'PyJWT',
         'atlassian_jwt'
     ],
-    setup_requires=['pytest-runner', 'pypandoc', 'mock', 'requests_mock'],
+    setup_requires=['pytest-runner', 'mock', 'requests_mock'],
     tests_require=['pytest'],
     classifiers=[
         'Development Status :: 4 - Beta',
