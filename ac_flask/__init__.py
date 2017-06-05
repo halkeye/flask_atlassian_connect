@@ -58,6 +58,10 @@ class ACAddon(object):
                 "self": self._relative_to_base("/addon/descriptor")
             },
         }
+        if not get_client_by_id_func:
+            raise Exception("Must provide get client function")
+        if not set_client_by_id_func:
+            raise Exception("Must provide get client function")
         self.get_client_by_id = get_client_by_id_func
         self.set_client_by_id = set_client_by_id_func
         self.auth = SimpleAuthenticator(addon=self)

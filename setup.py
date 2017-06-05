@@ -1,38 +1,30 @@
-"""
-Flask-DBConfig
---------------
+from setuptools import setup
+try:
+    import pypandoc
+    long_description = pypandoc.convert('README.md', 'rst')
+except ImportError:
+    long_description = ''
 
-Configure your Flask application from a local SQLite database, and never have
-to ship with a config file again!
-
-Links
-`````
-
-* `documentation <http://packages.python.org/Flask-DBConfig>`_
-
-"""
-
-from setuptools import setup, find_packages
 
 setup(
     name='Flask-AC',
     version='0.0.1',
-    url='https://github.com/saucelabs/flask-ac/',
+    url='https://github.com/halkeye/flask-ac/',
     license='Apache License, Version 2.0',
-    author='Sauce Labs',
-    author_email='opensource@saucelabs.com',
-    description='Configure Flask applications from a local DB',
-    long_description=__doc__,
-    packages=find_packages(),
+    author='Gavin Mogan',
+    author_email='opensource@gavinmogan.com',
+    description='Helper addon for Atlassian Connect',
+    long_description=long_description,
+    packages=['ac_flask', 'tests'],
     platforms='any',
     install_requires=[
-        'Flask',
-        'requests'
+        'Flask==0.12.2',
+        'requests',
+        'PyJWT',
+        'atlassian_jwt'
     ],
-    test_requires=[
-        'requests_mock',
-        'mock'
-    ],
+    setup_requires=['pytest-runner', 'pypandoc', 'mock', 'requests_mock'],
+    tests_require=['pytest'],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Web Environment',
