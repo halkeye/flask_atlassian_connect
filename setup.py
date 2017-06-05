@@ -1,6 +1,7 @@
 from setuptools import setup
 try:
     import pypandoc
+    print "Formats: %r" % pypandoc.get_pandoc_formats()
     long_description = pypandoc.convert('README.md', 'rst')
 except ImportError:
     long_description = ''
