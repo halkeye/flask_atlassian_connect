@@ -1,9 +1,12 @@
 language: python
 python:
 - '2.7'
+addons:
+  apt:
+    packages:
+      - pandoc
 install:
 - pip install pypandoc
-- apt-get install pandoc
 - python setup.py -q install
 deploy:
   provider: releases
