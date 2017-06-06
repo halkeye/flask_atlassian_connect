@@ -10,6 +10,12 @@ import re
 import requests
 
 
+__version__ = '0.0.1'
+__url__ = 'https://github.com/halkeye/ac-flask'
+__author__ = 'Gavin Mogan'
+__email__ = 'opensource@gavinmogan.com'
+
+
 class Client(dict):
     def __init__(self, **kwargs):
         self.__dict__.update(**kwargs)
