@@ -1,29 +1,22 @@
+import io
+import re
 from setuptools import setup
-try:
-    #import pypandoc
-    #print "Formats: %s" % (repr(pypandoc.get_pandoc_formats()))
-    long_description = '' # pypandoc.convert('README.md', 'rst')
-except ImportError:
-    long_description = ''
 
+init_py = io.open('ac_flask/__init__.py').read()
+metadata = dict(re.findall("__([a-z]+)__ = '([^']+)'", init_py))
+metadata['doc'] = re.findall('"""(.+)"""', init_py)[0]
 
 setup(
     name='AC_Flask',
-    version='0.0.1',
-    url='https://github.com/halkeye/ac-flask/',
-    license='Apache License, Version 2.0',
-    author='Gavin Mogan',
-    author_email='opensource@gavinmogan.com',
-    description='Helper addon for Atlassian Connect',
-    long_description=long_description,
+    version=metadata['version'],
+    description=metadata['doc'],
+    author=metadata['author'],
+    author_email=metadata['email'],
+    url=metadata['url'],
+    license=open('LICENSE.md').read(),
     packages=['ac_flask', 'tests'],
     platforms='any',
-    install_requires=[
-        'Flask',
-        'requests',
-        'PyJWT',
-        'atlassian_jwt'
-    ],
+    install_requires=io.open('requirements/runtime.txt').readlines(),
     setup_requires=['pytest-runner'],
     tests_require=['mock', 'requests_mock', 'pytest'],
     classifiers=[

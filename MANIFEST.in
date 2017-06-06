@@ -1,1 +1,2 @@
-include README.md
+include README.md CHANGELOG.md LICENSE.md
+recursive-include requirements *.txt
