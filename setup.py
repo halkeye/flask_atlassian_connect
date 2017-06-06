@@ -24,8 +24,8 @@ setup(
         'PyJWT',
         'atlassian_jwt'
     ],
-    setup_requires=['pytest-runner', 'mock', 'requests_mock'],
-    tests_require=['pytest'],
+    setup_requires=['pytest-runner'],
+    tests_require=['mock', 'requests_mock', 'pytest'],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Web Environment',
