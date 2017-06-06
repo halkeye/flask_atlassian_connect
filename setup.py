@@ -8,7 +8,7 @@ except ImportError:
 
 
 setup(
-    name='Flask-AC',
+    name='AC_Flask',
     version='0.0.1',
     url='https://github.com/halkeye/ac-flask/',
     license='Apache License, Version 2.0',
