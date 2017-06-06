@@ -10,6 +10,14 @@ import re
 import requests
 
 
+class Client(dict):
+    def __init__(self, **kwargs):
+        self.__dict__.update(**kwargs)
+
+    def __getitem__(self, k):
+        return self.__dict__.get(k)
+
+
 class SimpleAuthenticator(atlassian_jwt.Authenticator):
     def __init__(self, addon, *args, **kwargs):
         super(SimpleAuthenticator, self).__init__()
@@ -19,7 +27,9 @@ class SimpleAuthenticator(atlassian_jwt.Authenticator):
         client = self.addon.get_client_by_id(client_key)
         if client is None:
             raise Exception('No client for ' + client_key)
-        return client['sharedSecret']
+        if isinstance(client, dict):
+            return client.get('sharedSecret')
+        return client.sharedSecret
 
 
 def to_camelcase(s):
@@ -130,8 +140,8 @@ class ACAddon(object):
                     return '', 401
                 try:
                     jwt.decode(token,
-                               stored_client['sharedSecret'], 
-                               audience=stored_client['clientKey'])
+                               stored_client['sharedSecret'],
+                               options={"verify_aud": False})
                 except (ValueError, DecodeError):
                     # Invalid secret, so things did not get installed
                     return '', 401
