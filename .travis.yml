@@ -8,6 +8,7 @@ addons:
       - pandoc
 before_install:
 - pip install --upgrade pip
+- pip install --upgrade setuptools
 - pip --version
 install:
 - python setup.py -q install
