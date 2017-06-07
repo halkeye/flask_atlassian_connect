@@ -11,6 +11,8 @@ install:
 - pip install pypandoc
 - python setup.py -q install
 - python setup.py sdist
+script:
+- python setup.py test
 deploy:
   provider: releases
   api_key:
