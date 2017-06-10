@@ -44,10 +44,10 @@ def to_camelcase(s):
 
 class ACAddon(object):
     """Atlassian Connect Addon"""
-    def __init__(self, 
+    def __init__(self,
                  app=None,
                  key=None,
-                 get_client_by_id_func=None, 
+                 get_client_by_id_func=None,
                  set_client_by_id_func=None,
                  name=None,
                  description=None,
@@ -172,9 +172,35 @@ class ACAddon(object):
 
         return inner
 
-    def module(self, func=None, name=None, location=None, key=None, methods=['GET', 'POST']):
+    def webhook(self, event, path=None, excludeBody=False,
+                filter=None, propertyKeys=None):
+        if path is None:
+            path = "/webhook/" + event.replace(":", "")
+
+        webhook = {
+            "event": event,
+            "url": path,
+            "excludeBody": excludeBody
+        }
+        if filter:
+            webhook["filter"] = filter
+        if propertyKeys:
+            webhook["propertyKeys"] = propertyKeys
+
+        self.descriptor.setdefault('modules', {}).setdefault(
+            'webhooks', []).append(webhook)
+
+        def inner(func):
+            return self.route(anonymous=False, rule=path, methods=['POST'])(
+                func)
+
+        return inner
+
+    def module(self, func=None, name=None, location=None, key=None, methods=[
+               'GET', 'POST']):
         if func is None:
-            return partial(self.module, name=name, location=location, key=key, methods=methods)
+            return partial(self.module, name=name, location=location,
+                           key=key, methods=methods)
 
         if key is None:
             key = to_camelcase(func.__name__)

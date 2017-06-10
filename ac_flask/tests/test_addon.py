@@ -3,7 +3,7 @@ import json
 import requests_mock
 import requests
 from flask import Flask
-from ac_flask import ACAddon
+from .. import ACAddon
 from atlassian_jwt.encode import encode_token
 
 consumer_info_response = """<?xml version="1.0" encoding="UTF-8"?>
@@ -15,25 +15,25 @@ consumer_info_response = """<?xml version="1.0" encoding="UTF-8"?>
     </consumer>"""
 
 
+def decorator_noop(client):
+    return '', 204
+
+
 class ACFlaskTestCase(unittest.TestCase):
+    def set_client(self, client):
+        self.clients[client['clientKey']] = client
+
+    def get_client(self, clientKey):
+        return self.clients.get(clientKey)
 
     def setUp(self):
-        def _installed(client):
-            return '', 204
-
-        def set_client(client):
-            self.clients[client['clientKey']] = client
-
-        def get_client(clientKey):
-            return self.clients.get(clientKey)
-
         self.app = Flask("app")
         self.clients = {}
         self.ac = ACAddon(self.app,
-                          set_client_by_id_func=set_client,
-                          get_client_by_id_func=get_client)
+                          set_client_by_id_func=self.set_client,
+                          get_client_by_id_func=self.get_client)
         self.client = self.app.test_client()
-        self.ac.lifecycle('installed')(_installed)
+        self.ac.lifecycle('installed')(decorator_noop)
 
     def tearDown(self):
         pass
@@ -154,6 +154,36 @@ class ACFlaskTestCase(unittest.TestCase):
                                   content_type='application/json',
                                   headers={'Authorization': 'JWT ' + auth})
             self.assertEquals(401, rv.status_code)
+
+    def test_webook(self):
+        self.ac.webhook('jira:issue_created', filter="project is 'IM'")(
+            decorator_noop)
+
+        rv = self.client.get('/addon/descriptor')
+        self.assertEquals(200, rv.status_code)
+        self.assertIn({
+            "event": "jira:issue_created",
+            "excludeBody": False,
+            "filter": "project is 'IM'",
+            "url": "/webhook/jiraissue_created"
+        }, json.loads(rv.data)["modules"]["webhooks"])
+
+        client = dict(
+            baseUrl='https://gavindev.atlassian.net',
+            clientKey='test_webook',
+            publicKey='public123',
+            sharedSecret='myscret')
+        self.set_client(client)
+        auth = encode_token(
+            'POST',
+            '/webhook/jiraissue_created',
+            client['clientKey'],
+            client['sharedSecret'])
+        rv = self.client.post('/webhook/jiraissue_created',
+                              data=json.dumps(client),
+                              content_type='application/json',
+                              headers={'Authorization': 'JWT ' + auth})
+        self.assertEquals(204, rv.status_code)
 
 
 if __name__ == '__main__':
