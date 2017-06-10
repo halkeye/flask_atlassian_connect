@@ -1,6 +1,6 @@
 import io
 import re
-from setuptools import setup
+from setuptools import setup, find_packages
 
 init_py = io.open('ac_flask/__init__.py').read()
 metadata = dict(re.findall("__([a-z]+)__ = '([^']+)'", init_py))
@@ -14,11 +14,12 @@ setup(
     author_email=metadata['email'],
     url=metadata['url'],
     license=open('LICENSE.md').read(),
-    packages=['ac_flask', 'tests'],
+    packages=find_packages(),
     platforms='any',
     install_requires=io.open('requirements/runtime.txt').readlines(),
     setup_requires=['pytest-runner'],
-    tests_require=filter(lambda x: not x.startswith('-'), io.open('requirements/dev.txt').readlines()),
+    tests_require=filter(lambda x: not x.startswith('-'), io.open(
+        'requirements/dev.txt').readlines()),
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Web Environment',
