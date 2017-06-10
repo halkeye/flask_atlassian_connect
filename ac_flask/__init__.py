@@ -64,7 +64,7 @@ class ACAddon(object):
             "key": key or app.config.get('ADDON_KEY'),
             "authentication": {"type": "jwt"},
             "baseUrl": self._relative_to_base('/'),
-            "scopes": ["READ"],
+            "scopes": app.config.get('ADDON_SCOPES', ["READ"]),
             "vendor": {
                 "name": vendor_name or app.config.get('ADDON_VENDOR_NAME'),
                 "url": vendor_url or app.config.get('ADDON_VENDOR_URL')

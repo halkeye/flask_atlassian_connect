@@ -6,11 +6,16 @@ addons:
   apt:
     packages:
       - pandoc
+before_install:
+- pip install --upgrade pip
+- pip install --upgrade setuptools
+- pip install --upgrade pytest
+- pip --version
 install:
-- curl https://bootstrap.pypa.io/get-pip.py -sSf | python
-- pip install pypandoc
 - python setup.py -q install
 - python setup.py sdist
+script:
+- python setup.py test
 deploy:
   provider: releases
   api_key:

@@ -18,7 +18,7 @@ setup(
     platforms='any',
     install_requires=io.open('requirements/runtime.txt').readlines(),
     setup_requires=['pytest-runner'],
-    tests_require=['mock', 'requests_mock', 'pytest'],
+    tests_require=filter(lambda x: not x.startswith('-'), io.open('requirements/dev.txt').readlines()),
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Web Environment',
