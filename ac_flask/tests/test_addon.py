@@ -213,11 +213,39 @@ class ACFlaskTestCase(unittest.TestCase):
 
         client = dict(
             baseUrl='https://gavindev.atlassian.net',
-            clientKey='test_webook',
+            clientKey='test_webpanel',
             publicKey='public123',
             sharedSecret='myscret')
         self.set_client(client)
         url = '/webpanel/userPanel?issueKey=TEST-1'
+        auth = encode_token(
+            'GET', url,
+            client['clientKey'], client['sharedSecret'])
+        response = self.client.get(
+            url,
+            content_type='application/json',
+            headers={'Authorization': 'JWT ' + auth})
+        self.assertEquals(204, response.status_code)
+
+    def test_module(self):
+        """Confirm webpanel decorator works right"""
+        self.ac.module(name="Configure", key="configurePage")(decorator_noop)
+
+        response = self.client.get('/addon/descriptor')
+        self.assertEquals(200, response.status_code)
+        self.assertEquals({
+            "key": "configurePage",
+            "name": {"value": "Configure"},
+            "url": "/module/configurePage"
+        }, json.loads(response.data)["modules"]["configurePage"])
+
+        client = dict(
+            baseUrl='https://gavindev.atlassian.net',
+            clientKey='test_module',
+            publicKey='public123',
+            sharedSecret='myscret')
+        self.set_client(client)
+        url = '/module/configurePage'
         auth = encode_token(
             'GET', url,
             client['clientKey'], client['sharedSecret'])
