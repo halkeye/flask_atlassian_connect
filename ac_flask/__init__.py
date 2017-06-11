@@ -97,16 +97,16 @@ class ACAddon(object):
             app.config.from_object(config)
 
         if env_prefix is not None:
-            env_vars = {key[len(env_prefix):]: val for 
+            env_vars = {key[len(env_prefix):]: val for
                         key, val in os.environ.items()}
             app.config.update(env_vars)
 
         if app.config['DEBUG']:
-            # These two lines enable debugging at httplib level 
+            # These two lines enable debugging at httplib level
             # (requests->urllib3->httplib)
-            # You will see the REQUEST, including HEADERS and DATA, and 
+            # You will see the REQUEST, including HEADERS and DATA, and
             # RESPONSE with HEADERS but without DATA.
-            # The only thing missing will be the response.body which is not 
+            # The only thing missing will be the response.body which is not
             # logged.
             httplib.HTTPConnection.debuglevel = 1
 
@@ -125,12 +125,12 @@ class ACAddon(object):
         def inner(*args, **kwargs):
             client = request.get_json()
             response = requests.get(
-                client['baseUrl'].rstrip('/') + 
+                client['baseUrl'].rstrip('/') +
                 '/plugins/servlet/oauth/consumer-info')
             response.raise_for_status()
 
             key = re.search(r"<key>(.*)</key>", response.text).groups()[0]
-            publicKey = re.search(  
+            publicKey = re.search(
                 r"<publicKey>(.*)</publicKey>", response.text
             ).groups()[0]
 
