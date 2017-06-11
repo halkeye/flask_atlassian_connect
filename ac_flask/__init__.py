@@ -10,7 +10,7 @@ import re
 import requests
 
 
-__version__ = '0.0.1'
+__version__ = '0.0.2'
 __url__ = 'https://github.com/halkeye/ac-flask'
 __author__ = 'Gavin Mogan'
 __email__ = 'opensource@gavinmogan.com'
