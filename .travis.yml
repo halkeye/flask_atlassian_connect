@@ -5,7 +5,7 @@ python:
 addons:
   apt:
     packages:
-      - pandoc
+    - pandoc
 before_install:
 - pip install --upgrade pip
 - pip install --upgrade setuptools
@@ -16,6 +16,9 @@ install:
 - python setup.py sdist
 script:
 - python setup.py test
+- pip install -r requirements/dev.txt
+- py.test
+- coverage xml
 deploy:
   provider: releases
   api_key:
@@ -24,3 +27,6 @@ deploy:
   on:
     tags: true
     repo: halkeye/ac-flask
+env:
+  global:
+    secure: dCgPOgVthE6eWJi3vjo0Kq4tXf8cCfRDXE7st5dsbPNfpuE6Qb/QRyeAnc4bFBrIu1HpUu1058hmt+AUa0RMcjD1IGQZI4vaziVAykTpKi20RFIfkShxlC2ZNNQyNlcWlsX1MWuyMy7Z6lhDJMmxho+Fu4FYneiM6hTWYmJwjl8q4u09YvMNc4ftuxuR9KTmdqqAnPqHcmVlU3suaXkUd10oz0OUIy2Dap7U/Rvn9sjphHtEr77QrFbM+euFUTO6HIqRZ/5eeqwydGjwHikAyPIQnisc4rF8QUJrjFc7rGlc788HF3IZ7pk3FLg0y1YCsK5wpe8LNnSmZTte+2GthuZuUS+9uuDMFvrZvbg81yLQ2Sc2m4opomIrCJotIFfUi35X24Hp2cJ2sDlHhVvQ4iwWqy5QAOaYr+xzcyAPsHw6WwLRznclraSOrHfFTRRtZ8BLqXRRvwOt/DJFu4WQlEmPn/UTTZ/HsVpLHfV+L+W8xk13F/X68Ch2E+IQBjYre5xAN+55n8CZ4ju4BbstJxO+mHm9eGvReLejglT/vUNNBm/vE9sWXCPM57Qfu8MG22GV9tLLYOULu4owhQBpjcqmWS+iJyXam2CJc2vL5WSwfxbieY79JCNy0Sh+2jJ4kqmC5SXoXjciFyfREF//cRx2Ess28sjjbbs/1c0w7oU=
