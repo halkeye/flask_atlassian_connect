@@ -220,13 +220,7 @@ class ACAddon(object):
         ).append(webpanel_capability)
 
         def inner(func):
-            def inner_inner(*args, **kwargs):
-                client_key = self.auth.authenticate(
-                    request.method, request.url, request.headers)
-                client = self.get_client_by_id(client_key)
-                kwargs['client'] = client
-                return func(*args, **kwargs)
-            return self.app.route(rule=path, **kwargs)(inner_inner)
+            return self.route(anonymous=False, rule=path, methods=['GET'])(func)
 
         return inner
 

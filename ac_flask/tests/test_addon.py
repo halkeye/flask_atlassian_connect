@@ -185,6 +185,48 @@ class ACFlaskTestCase(unittest.TestCase):
                               headers={'Authorization': 'JWT ' + auth})
         self.assertEquals(204, rv.status_code)
 
+    def test_webpanel(self):
+        """Confirm webpanel decorator works right"""
+        self.ac.webpanel(
+            key="userPanel",
+            name="Bamboo Employee Information",
+            location="atl.jira.view.issue.right.context",
+            conditions=[{
+                "condition": "project_type",
+                "params": {"projectTypeKey": "service_desk"}
+                }])(decorator_noop)
+
+        response = self.client.get('/addon/descriptor')
+        self.assertEquals(200, response.status_code)
+        self.assertIn({
+            "conditions": [
+                {
+                    "condition": "project_type",
+                    "params": {"projectTypeKey": "service_desk"}
+                }
+            ],
+            "key": "userPanel",
+            "location": "atl.jira.view.issue.right.context",
+            "name": {"value": "Bamboo Employee Information"},
+            "url": "/webpanel/userPanel?issueKey={issue.key}"
+        }, json.loads(response.data)["modules"]["webPanels"])
+
+        client = dict(
+            baseUrl='https://gavindev.atlassian.net',
+            clientKey='test_webook',
+            publicKey='public123',
+            sharedSecret='myscret')
+        self.set_client(client)
+        url = '/webpanel/userPanel?issueKey=TEST-1'
+        auth = encode_token(
+            'GET', url,
+            client['clientKey'], client['sharedSecret'])
+        response = self.client.get(
+            url,
+            content_type='application/json',
+            headers={'Authorization': 'JWT ' + auth})
+        self.assertEquals(204, response.status_code)
+
 
 if __name__ == '__main__':
     unittest.main()
