@@ -38,6 +38,21 @@ class ACFlaskTestCase(unittest.TestCase):
     def tearDown(self):
         pass
 
+    def request_get(self, clientKey, url):
+        client = dict(
+            baseUrl='https://gavindev.atlassian.net',
+            clientKey=clientKey,
+            publicKey='public123',
+            sharedSecret='myscret')
+        self.set_client(client)
+        auth = encode_token(
+            'GET', url,
+            client['clientKey'], client['sharedSecret'])
+        return self.client.get(
+            url,
+            content_type='application/json',
+            headers={'Authorization': 'JWT ' + auth})
+
     def test_index_redirects(self):
         rv = self.client.get('/')
         self.assertEquals(302, rv.status_code)
@@ -211,20 +226,8 @@ class ACFlaskTestCase(unittest.TestCase):
             "url": "/webpanel/userPanel?issueKey={issue.key}"
         }, json.loads(response.data)["modules"]["webPanels"])
 
-        client = dict(
-            baseUrl='https://gavindev.atlassian.net',
-            clientKey='test_webpanel',
-            publicKey='public123',
-            sharedSecret='myscret')
-        self.set_client(client)
-        url = '/webpanel/userPanel?issueKey=TEST-1'
-        auth = encode_token(
-            'GET', url,
-            client['clientKey'], client['sharedSecret'])
-        response = self.client.get(
-            url,
-            content_type='application/json',
-            headers={'Authorization': 'JWT ' + auth})
+        response = self.request_get('test_webpanel',
+                                    '/webpanel/userPanel?issueKey=TEST-1')
         self.assertEquals(204, response.status_code)
 
     def test_module(self):
@@ -239,20 +242,7 @@ class ACFlaskTestCase(unittest.TestCase):
             "url": "/module/configurePage"
         }, json.loads(response.data)["modules"]["configurePage"])
 
-        client = dict(
-            baseUrl='https://gavindev.atlassian.net',
-            clientKey='test_module',
-            publicKey='public123',
-            sharedSecret='myscret')
-        self.set_client(client)
-        url = '/module/configurePage'
-        auth = encode_token(
-            'GET', url,
-            client['clientKey'], client['sharedSecret'])
-        response = self.client.get(
-            url,
-            content_type='application/json',
-            headers={'Authorization': 'JWT ' + auth})
+        response = self.request_get('test_module', "/module/configurePage")
         self.assertEquals(204, response.status_code)
 
 
