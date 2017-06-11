@@ -196,8 +196,8 @@ class ACAddon(object):
 
         return inner
 
-    def module(self, func=None, name=None, location=None, key=None, methods=[
-               'GET', 'POST']):
+    def module(self, func=None, name=None, location=None, key=None, methods=None):
+        methods = methods or ['GET', 'POST']
         if func is None:
             return partial(self.module, name=name, location=location,
                            key=key, methods=methods)
