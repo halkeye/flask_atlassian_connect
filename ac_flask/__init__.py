@@ -101,26 +101,6 @@ class ACAddon(object):
                         key, val in os.environ.items()}
             app.config.update(env_vars)
 
-        if app.config['DEBUG']:
-            # These two lines enable debugging at httplib level
-            # (requests->urllib3->httplib)
-            # You will see the REQUEST, including HEADERS and DATA, and
-            # RESPONSE with HEADERS but without DATA.
-            # The only thing missing will be the response.body which is not
-            # logged.
-            httplib.HTTPConnection.debuglevel = 1
-
-            # You must initialize logging, otherwise you'll not see debug
-            # output.
-            logging.basicConfig()
-            logging.getLogger().setLevel(logging.DEBUG)
-            requests_log = logging.getLogger("requests.packages.urllib3")
-            requests_log.setLevel(logging.DEBUG)
-            requests_log.propagate = True
-        else:
-            logging.basicConfig()
-            logging.getLogger().setLevel(logging.WARN)
-
     def _installed_wrapper(self, func):
         def inner(*args, **kwargs):
             client = request.get_json()
