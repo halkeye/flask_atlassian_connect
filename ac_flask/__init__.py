@@ -82,13 +82,13 @@ class ACAddon(object):
         self.set_client_by_id = set_client_by_id_func
         self.auth = SimpleAuthenticator(addon=self)
 
-        @app.route('/', methods=['GET'])
         def redirect_to_descriptor():
             return redirect('/addon/descriptor')
+        app.route('/', methods=['GET'])(redirect_to_descriptor)
 
-        @app.route('/addon/descriptor', methods=['GET'])
         def get_descriptor():
             return jsonify(self.descriptor)
+        app.route('/addon/descriptor', methods=['GET'])(get_descriptor)
 
     @staticmethod
     def _init_app(app, config, env_prefix):
