@@ -15,7 +15,7 @@ consumer_info_response = """<?xml version="1.0" encoding="UTF-8"?>
     </consumer>"""
 
 
-def decorator_noop(client):
+def decorator_noop(**kwargs):
     return '', 204
 
 

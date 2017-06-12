@@ -171,8 +171,14 @@ class ACAddon(object):
             'webhooks', []).append(webhook)
 
         def inner(func):
+            def events_jira_handler(**kwargs):
+                content = request.get_json(silent=False)
+                ret = func(event=content, **kwargs)
+                if isinstance(ret, tuple):
+                    return ret
+                return '', 204
             return self.route(anonymous=False, rule=path, methods=['POST'])(
-                func)
+                events_jira_handler)
 
         return inner
 
