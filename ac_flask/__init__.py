@@ -177,8 +177,9 @@ class ACAddon(object):
                 if isinstance(ret, tuple):
                     return ret
                 return '', 204
-            return self.route(anonymous=False, rule=path, methods=['POST'])(
+            self.route(anonymous=False, rule=path, methods=['POST'])(
                 events_jira_handler)
+            return func
 
         return inner
 
