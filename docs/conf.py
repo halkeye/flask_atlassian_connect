@@ -101,6 +101,7 @@ todo_include_todos = True
 html_theme_path = ['_themes']
 html_theme = 'flask_small'
 html_theme_options = {
+    'index_logo': 'flask_atlassian_connect.png',
     'github_fork': 'halkeye/flask_atlassian_connect'
 }
 
