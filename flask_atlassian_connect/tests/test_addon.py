@@ -287,5 +287,6 @@ class ACFlaskTestCase(unittest.TestCase):
         self.assertEquals(204, response.status_code)
         self.assertEquals('', response.data)
 
+
 if __name__ == '__main__':
     unittest.main()
