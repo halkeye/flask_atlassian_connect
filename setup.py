@@ -11,12 +11,11 @@ from setuptools import find_packages, setup
 
 init_py = io.open('flask_atlassian_connect/__init__.py').read()
 metadata = dict(re.findall("__([a-z]+)__ = '([^']+)'", init_py))
-metadata['doc'] = re.findall('"""(.+)"""', init_py)[0]
 
 setup(
     name='Flask-AtlassianConnect',
     version=metadata['version'],
-    description=metadata['doc'],
+    description="Atlassian Connect Helper",
     long_description=__doc__,
     author=metadata['author'],
     author_email=metadata['email'],
