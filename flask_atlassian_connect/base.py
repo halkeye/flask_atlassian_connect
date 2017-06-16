@@ -327,6 +327,47 @@ class AtlassianConnect(object):
         return self._provide_client_handler(section, key)
 
     def webpanel(self, key, name=None, location=None, **kwargs):
+        """
+        Webpanel decorator. See `external webpanel`_ documentation
+
+        Example::
+
+            @ac.webpanel(key="userPanel",
+                name="Employee Information",
+                location="atl.jira.view.issue.right.context",
+                conditions=[{
+                    "condition": "project_type",
+                    "params": {"projectTypeKey": "service_desk"}
+                }])
+            def employee_information_panel(client):
+                return 'this is issue %s' % request.args.get('issueKey')
+
+        :param key:
+            A key to identify this module.
+
+            This key must be unique relative to the add on, with the exception
+            of Confluence macros: Their keys need to be globally unique.
+
+            Keys must only contain alphanumeric characters and dashes.
+        :type event: string
+
+        :param location:
+            The location in the application interface where the web section
+            should appear.
+            For the Atlassian application interface, a location is something
+            like the coordinates on a map.
+            It points to a particular drop-down menu or navigation list in
+            the UI.
+        :type event: string
+
+        :param name:
+            A human readable name.
+        :type event: string
+
+        Anything else from the `external webpanel`_ docs should also work
+
+        .. _external webpanel: https://developer.atlassian.com/static/connect/docs/beta/modules/common/web-panel.html
+        """
         name = name or key
         location = location or key
         section = 'webpanel'
