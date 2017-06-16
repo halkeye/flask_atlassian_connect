@@ -250,7 +250,6 @@ class ACFlaskTestCase(unittest.TestCase):
         response = self._request_get(
             'test_module',
             "/atlassian_connect/module/configurePage")
-        print response.data
         self.assertEquals(204, response.status_code)
 
 

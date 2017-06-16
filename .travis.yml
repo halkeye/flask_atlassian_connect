@@ -15,6 +15,7 @@ script:
 - python setup.py test
 - pip install -r requirements/dev.txt
 - py.test
+after_success:
 - coverage xml
 - python-codacy-coverage -r coverage.xml
 env:
