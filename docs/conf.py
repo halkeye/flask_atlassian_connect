@@ -36,6 +36,7 @@ extensions = ['sphinx.ext.autosummary',
               'sphinx.ext.autodoc',
               'sphinx.ext.intersphinx',
               'sphinx.ext.todo',
+              'sphinx.ext.githubpages',
               'sphinx.ext.coverage',
               'sphinx.ext.ifconfig']
 
