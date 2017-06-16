@@ -131,15 +131,43 @@ class AtlassianConnect(object):
 
     def lifecycle(self, name):
         """
-        Lifecycle decorator
+        Lifecycle decorator. See `external lifecycle`_ documentation
+
+        Example::
+
+            @ac.lifecycle("installed")
+            def lifecycle_installed(client):
+                print "New client installed!!!!"
+                print client
+
+        Payload::
+
+            {
+                "key": "installed-addon-key",
+                "clientKey": "unique-client-identifier",
+                "sharedSecret": "a-secret-key-not-to-be-lost",
+                "serverVersion": "server-version",
+                "pluginsVersion": "version-of-connect",
+                "baseUrl": "http://example.atlassian.net",
+                "productType": "jira",
+                "description": "Atlassian JIRA at https://example.atlassian.net",
+                "serviceEntitlementNumber": "SEN-number",
+                "eventType": "installed"
+            }
 
         :param name:
             Which atlassian connect lifecycle to handle.
 
-            Examples:
+            At time of writing, the following are the only options:
                 * installed
+                * uninstalled
+                * enabled
+                * disabled
+
+            Each of the above will call your Client's save and load methods
         :type name: string
 
+        .. _external lifecycle: https://developer.atlassian.com/static/connect/docs/beta/modules/lifecycle.html
         """
         section = "lifecycle"
 
