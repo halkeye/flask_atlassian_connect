@@ -1,5 +1,5 @@
-Flask-AutoIndex
-~~~~~~~~~~~~~~~
+Flask-AtlassianConnect
+~~~~~~~~~~~~~~~~~~~~~~
 
 .. module:: flask_atlassian_connect
 
@@ -11,7 +11,7 @@ based integrations using a `Flask`_ application
 Installation
 ============
 
-Install Flask-AutoIndex with ``pip`` command::
+Install Flask-AtlassianConnect with ``pip`` command::
 
     $ pip install Flask-AtlassianConnect
 
