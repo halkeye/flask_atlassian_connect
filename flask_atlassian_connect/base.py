@@ -195,7 +195,15 @@ class AtlassianConnect(object):
 
     def webhook(self, event, exclude_body=False, **kwargs):
         """
-        Webhook decorator. See external_ documentation
+        Webhook decorator. See `external webhooks`_ documentation
+
+        Example::
+
+            @ac.webhook("jira:issue_created")
+            def jira_issue_created(client, event):
+                print "An issue was just created!"
+                print "Take a look at this:"
+                print event
 
         :param event:
             Specifies the named event you would like to listen to
@@ -218,7 +226,7 @@ class AtlassianConnect(object):
         :type event: array
 
         .. _filtering: https://developer.atlassian.com/static/connect/docs/beta/modules/common/webhook.html#Filtering
-        .. _external: https://developer.atlassian.com/jiradev/jira-apis/webhooks
+        .. _external webhooks: https://developer.atlassian.com/jiradev/jira-apis/webhooks
         """
         section = 'webhook'
 
@@ -243,8 +251,40 @@ class AtlassianConnect(object):
         return self._provide_client_handler(
             section, event.replace(":", ""), kwargs_updator=_wrapper)
 
-    def module(self, key, name=None, location=None, methods=None):
-        methods = methods or ['GET', 'POST']
+    def module(self, key, name=None, location=None):
+        """
+        Module decorator. See `external modules`_ documentation
+
+        Example::
+
+            @ac.module("configurePage", name="Configure")
+            def configure_page(client):
+                return '<h1>Configure Page</h1>', 200
+
+        :param key:
+            A key to identify this module.
+
+            This key must be unique relative to the add on, with the exception
+            of Confluence macros: Their keys need to be globally unique.
+
+            Keys must only contain alphanumeric characters and dashes.
+        :type event: string
+
+        :param location:
+            The location in the application interface where the web section
+            should appear.
+            For the Atlassian application interface, a location is something
+            like the coordinates on a map.
+            It points to a particular drop-down menu or navigation list in
+            the UI.
+        :type event: string
+
+        :param name:
+            A human readable name.
+        :type event: string
+
+        .. _external modules: https://developer.atlassian.com/static/connect/docs/beta/modules/common/web-section.html
+        """
         name = name or key
         location = location or key
         section = 'module'
