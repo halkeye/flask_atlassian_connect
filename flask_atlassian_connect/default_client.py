@@ -21,7 +21,8 @@ class Client(object):
 
     @staticmethod
     def load(client_key):
-        """Loads a Client from the (internal) database
+        """
+        Loads a Client from the (internal) database
 
         :param client_key:
             jira/confluence clientKey to load from db
@@ -31,7 +32,8 @@ class Client(object):
 
     @staticmethod
     def save(client):
-        """Save a client to the database
+        """
+        Save a client to the database
 
         :param client:
             Client object (Default Class or overriden class) to save

@@ -1,12 +1,13 @@
 import re
-from functools import partial, update_wrapper, wraps
+from functools import wraps
 
 from atlassian_jwt import Authenticator
-from flask import abort, current_app, jsonify, redirect, request
+from flask import abort, current_app, jsonify, request
 from jwt import decode
 from jwt.exceptions import DecodeError
 from requests import get
 from .default_client import Client
+
 
 def _relative_to_base(app, path):
     base = app.config['BASE_URL']
@@ -204,7 +205,6 @@ class AtlassianConnect(object):
             Any filters you want to use to prevent a webhook
             from firing
         :type event: string
-        
         """
         section = 'webhook'
 
