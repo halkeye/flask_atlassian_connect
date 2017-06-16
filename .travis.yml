@@ -17,6 +17,8 @@ after_success:
 - coverage xml
 - python-codacy-coverage -r coverage.xml
 - invoke docs
+# We need to add .nojekyll so _static works
+- touch docs/build/.nojekyll
 deploy:
   provider: pages
   skip_cleanup: true
