@@ -14,25 +14,38 @@ def _relative_to_base(app, path):
     return base + path
 
 
-class Client(dict):
-    """Default implementation of Client object"""
-    def __init__(self, *args, **kwargs):
-        super(Client, self).__init__(*args, **kwargs)
-        self.__dict__.update(**kwargs)
+class Client(object):
+    """Reference implementation of Client object"""
+    _clients = {}
 
-    def __getitem__(self, k):
-        return self.__dict__.get(k)
+    def __init__(self, **kwargs):
+        super(Client, self).__init__()
+        self.clientKey = None
+        self.sharedSecret = None
+        self.baseUrl = None
+        for k, v in kwargs.items():
+            setattr(self, k, v)
+
+    @staticmethod
+    def load(client_key):
+        """Loads a Client from the (internal) database"""
+        return Client._clients.get(client_key)
+
+    @staticmethod
+    def save(client):
+        """Save a client to the database"""
+        Client._clients[client.clientKey] = client
 
 
-class SimpleAuthenticator(Authenticator):
+class _SimpleAuthenticator(Authenticator):
     """Implementation of Authenticator for Atlassian"""
     def __init__(self, addon, *args, **kwargs):
-        super(SimpleAuthenticator, self).__init__(*args, **kwargs)
+        super(_SimpleAuthenticator, self).__init__(*args, **kwargs)
         self.addon = addon
 
     def get_shared_secret(self, client_key):
         """ . """
-        client = self.addon.get_client_by_id(client_key)
+        client = self.addon.client_class.load(client_key)
         if client is None:
             raise Exception('No client for ' + client_key)
         if isinstance(client, dict):
@@ -41,11 +54,14 @@ class SimpleAuthenticator(Authenticator):
 
 
 class AtlassianConnect(object):
-    """Atlassian Connect Addon"""
-    def __init__(self,
-                 app=None,
-                 get_client_by_id_func=None,
-                 set_client_by_id_func=None):
+    """This class is used to make creating an Atlassian Connect based
+    addon a lot simplier and more straight forward. It takes care of all
+    the authentication and authorization for you.
+
+    You will need to provide a Client class that
+    contains load(id) and save(client) methods.
+    """
+    def __init__(self, app=None, client_class=Client):
         self.app = app
         if app is not None:
             self.init_app(app)
@@ -65,13 +81,8 @@ class AtlassianConnect(object):
                 "self": _relative_to_base(app, "/atlassian_connect/descriptor")
             },
         }
-        if not get_client_by_id_func:
-            raise Exception("Must provide get client function")
-        if not set_client_by_id_func:
-            raise Exception("Must provide get client function")
-        self.get_client_by_id = get_client_by_id_func
-        self.set_client_by_id = set_client_by_id_func
-        self.auth = SimpleAuthenticator(addon=self)
+        self.client_class = client_class
+        self.auth = _SimpleAuthenticator(addon=self)
         self.sections = {}
 
     def init_app(self, app):
@@ -80,19 +91,19 @@ class AtlassianConnect(object):
 
         :param app:
             App Object
-        :type app: App Object
+        :type app: flask.Flask
         """
         app.config.setdefault('BASE_URL', u"http://localhost:5000")
         app.route('/atlassian_connect/descriptor',
-                  methods=['GET'])(self.get_descriptor)
+                  methods=['GET'])(self._get_descriptor)
         app.route('/atlassian_connect/<section>/<name>',
-                  methods=['GET', 'POST'])(self.handler_router)
+                  methods=['GET', 'POST'])(self._handler_router)
 
-    def get_descriptor(self):
+    def _get_descriptor(self):
         """Output atlassian connector descriptor file"""
         return jsonify(self.descriptor)
 
-    def handler_router(self, section, name):
+    def _handler_router(self, section, name):
         """
         Main Router for Atlassian Connect plugin
 
@@ -122,7 +133,7 @@ class AtlassianConnect(object):
                     request.method,
                     request.url,
                     request.headers)
-                client = self.get_client_by_id(client_key)
+                client = self.client_class.load(client_key)
                 if not client:
                     abort(401)
                 kwargs['client'] = client
@@ -146,6 +157,7 @@ class AtlassianConnect(object):
 
         :param name:
             Which atlassian connect lifecycle to handle.
+
             Examples:
                 * installed
         :type name: string
@@ -168,21 +180,21 @@ class AtlassianConnect(object):
     def _installed_wrapper(self, func):
         @wraps(func)
         def inner(*args, **kwargs):
-            client = request.get_json()
+            client = self.client_class(**request.get_json())
             response = get(
-                client['baseUrl'].rstrip('/') +
+                client.baseUrl.rstrip('/') +
                 '/plugins/servlet/oauth/consumer-info')
             response.raise_for_status()
 
             key = re.search(r"<key>(.*)</key>", response.text).groups()[0]
-            publicKey = re.search(
+            public_key = re.search(
                 r"<publicKey>(.*)</publicKey>", response.text
             ).groups()[0]
 
-            if key != client['clientKey'] or publicKey != client['publicKey']:
+            if key != client.clientKey or public_key != client.publicKey:
                 raise Exception("Invalid Credentials")
 
-            stored_client = self.get_client_by_id(client['clientKey'])
+            stored_client = self.client_class.load(client.clientKey)
             if stored_client:
                 token = request.headers.get('authorization', '').lstrip('JWT ')
                 if not token:
@@ -192,19 +204,18 @@ class AtlassianConnect(object):
                 try:
                     decode(
                         token,
-                        stored_client['sharedSecret'],
+                        stored_client.sharedSecret,
                         options={"verify_aud": False})
                 except (ValueError, DecodeError):
                     # Invalid secret, so things did not get installed
                     return '', 401
 
-            self.set_client_by_id(client)
+            self.client_class.save(client)
             kwargs['client'] = client
             return func(*args, **kwargs)
         return inner
 
-    def webhook(self, event, path=None, exclude_body=False,
-                filter=None, property_keys=None):
+    def webhook(self, event, exclude_body=False, property_keys=None, **kwargs):
         """
         Webhook decorator
 
@@ -212,11 +223,11 @@ class AtlassianConnect(object):
             Which event do we want to listen to
         :type event: string
 
-        :param path:
-            Which event do we want to listen to
-
-            Defa
+        :param filter:
+            Any filters you want to use to prevent a webhook
+            from firing
         :type event: string
+        
         """
         section = 'webhook'
 
@@ -225,8 +236,8 @@ class AtlassianConnect(object):
             "url": AtlassianConnect._make_path(section, event.replace(":", "")),
             "excludeBody": exclude_body
         }
-        if filter:
-            webhook["filter"] = filter
+        if kwargs.get('filter'):
+            webhook["filter"] = kwargs.pop('filter')
         if property_keys:
             webhook["propertyKeys"] = property_keys
 

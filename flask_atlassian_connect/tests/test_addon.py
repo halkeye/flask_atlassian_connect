@@ -4,6 +4,7 @@ import requests_mock
 import requests
 from flask import Flask
 from .. import AtlassianConnect
+from ..base import Client
 from atlassian_jwt.encode import encode_token
 
 consumer_info_response = """<?xml version="1.0" encoding="UTF-8"?>
@@ -21,21 +22,19 @@ def decorator_noop(**kwargs):
     return '', 204
 
 
+class _TestClient(Client):
+    @staticmethod
+    def reset():
+        """Clear all clients out of internal storage"""
+        Client._clients = {}
+
+
 class ACFlaskTestCase(unittest.TestCase):
     """Test Case"""
-    def _set_client(self, client):
-        self.clients[client['clientKey']] = client
-
-    def _get_client(self, client_key):
-        return self.clients.get(client_key)
-
     def setUp(self):
         self.app = Flask("app")
-        self.clients = {}
-        self.ac = AtlassianConnect(
-            self.app,
-            set_client_by_id_func=self._set_client,
-            get_client_by_id_func=self._get_client)
+        self.ac = AtlassianConnect(self.app, client_class=_TestClient)
+        _TestClient.reset()
         self.client = self.app.test_client()
         self.ac.lifecycle('installed')(decorator_noop)
 
@@ -43,35 +42,36 @@ class ACFlaskTestCase(unittest.TestCase):
         pass
 
     def _request_get(self, clientKey, url):
-        client = dict(
+        client = _TestClient(
             baseUrl='https://gavindev.atlassian.net',
             clientKey=clientKey,
             publicKey='public123',
             sharedSecret='myscret')
-        self._set_client(client)
+        _TestClient.save(client)
         auth = encode_token(
             'GET', url,
-            client['clientKey'], client['sharedSecret'])
+            client.clientKey, 
+            client.sharedSecret)
         return self.client.get(
             url,
             content_type='application/json',
             headers={'Authorization': 'JWT ' + auth})
 
     def _request_post(self, clientKey, url, body):
-        client = dict(
+        client = _TestClient(
             baseUrl='https://gavindev.atlassian.net',
             clientKey='test_webook',
             publicKey='public123',
             sharedSecret='myscret')
-        self._set_client(client)
+        _TestClient.save(client)
         auth = encode_token(
             'POST',
             '/atlassian_connect/webhook/jiraissue_created',
-            client['clientKey'],
-            client['sharedSecret'])
+            client.clientKey,
+            client.sharedSecret)
         return self.client.post(
             url,
-            data=json.dumps(client),
+            data=json.dumps(body),
             content_type='application/json',
             headers={'Authorization': 'JWT ' + auth})
 
@@ -99,7 +99,6 @@ class ACFlaskTestCase(unittest.TestCase):
         with requests_mock.mock() as m:
             m.get('https://gavindev.atlassian.net/plugins/servlet/oauth/consumer-info',
                   text=consumer_info_response)
-
             client = dict(
                 baseUrl='https://gavindev.atlassian.net',
                 clientKey='abc123',
