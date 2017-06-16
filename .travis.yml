@@ -12,9 +12,9 @@ before_install:
 install:
 - python setup.py -q install
 - python setup.py sdist
-script:
-- python setup.py test
 - pip install -r requirements/dev.txt
+script:
+#- python setup.py test
 - py.test
 after_success:
 - coverage xml
