@@ -94,9 +94,8 @@ class AtlassianConnect(object):
             print (section, name, self.sections)
             abort(404)
         ret = method()
-        if isinstance(ret, tuple):
+        if ret is not None:
             return ret
-
         return '', 204
 
     @staticmethod
@@ -119,7 +118,7 @@ class AtlassianConnect(object):
                     kwargs.update(kwargs_updator(**kwargs))
 
                 ret = func(**kwargs)
-                if isinstance(ret, tuple):
+                if ret is not None:
                     return ret
                 return '', 204
             self._add_handler(section, name, _handler)

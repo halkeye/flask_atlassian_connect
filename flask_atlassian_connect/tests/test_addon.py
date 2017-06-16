@@ -22,6 +22,16 @@ def decorator_noop(**kwargs):
     return '', 204
 
 
+def decorator_a_string(**kwargs):
+    """This is just a simple function to prove something happens"""
+    del kwargs
+    return '<h1>Something</h1>'
+
+def decorator_none(**kwargs):
+    """This is a decorator that doesn't return"""
+    del kwargs
+
+
 class _TestClient(Client):
     @staticmethod
     def reset():
@@ -213,7 +223,7 @@ class ACFlaskTestCase(unittest.TestCase):
             conditions=[{
                 "condition": "project_type",
                 "params": {"projectTypeKey": "service_desk"}
-                }])(decorator_noop)
+                }])(decorator_a_string)
 
         response = self.client.get('/atlassian_connect/descriptor')
         self.assertEquals(200, response.status_code)
@@ -233,7 +243,8 @@ class ACFlaskTestCase(unittest.TestCase):
         response = self._request_get(
             'test_webpanel',
             '/atlassian_connect/webpanel/userPanel?issueKey=TEST-1')
-        self.assertEquals(204, response.status_code)
+        self.assertEquals(200, response.status_code)
+        self.assertEquals('<h1>Something</h1>', response.data)
 
     def test_module(self):
         """Confirm webpanel decorator works right"""
@@ -252,6 +263,29 @@ class ACFlaskTestCase(unittest.TestCase):
             "/atlassian_connect/module/configurePage")
         self.assertEquals(204, response.status_code)
 
+    def test_decorator_return_values(self):
+        """Confirm webpanel decorator works right"""
+        self.ac.webpanel(key="aString")(decorator_a_string)
+        self.ac.webpanel(key="noop")(decorator_noop)
+        self.ac.webpanel(key="none")(decorator_none)
+
+        response = self._request_get(
+            'test_decorator_return_values',
+            '/atlassian_connect/webpanel/aString?issueKey=TEST-1')
+        self.assertEquals(200, response.status_code)
+        self.assertEquals('<h1>Something</h1>', response.data)
+
+        response = self._request_get(
+            'test_decorator_return_values',
+            '/atlassian_connect/webpanel/noop?issueKey=TEST-1')
+        self.assertEquals(204, response.status_code)
+        self.assertEquals('', response.data)
+
+        response = self._request_get(
+            'test_decorator_return_values',
+            '/atlassian_connect/webpanel/none?issueKey=TEST-1')
+        self.assertEquals(204, response.status_code)
+        self.assertEquals('', response.data)
 
 if __name__ == '__main__':
     unittest.main()
