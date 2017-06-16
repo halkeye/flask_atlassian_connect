@@ -29,7 +29,6 @@ Basic usage:
 
 .. code-block:: python
 
-    import os.path
     from flask import Flask
     from flask_atlassian_connect import AtlassianConnect
 
