@@ -50,7 +50,7 @@ class ACFlaskTestCase(unittest.TestCase):
         _TestClient.save(client)
         auth = encode_token(
             'GET', url,
-            client.clientKey, 
+            client.clientKey,
             client.sharedSecret)
         return self.client.get(
             url,
@@ -195,7 +195,7 @@ class ACFlaskTestCase(unittest.TestCase):
         }, json.loads(response.data)["modules"]["webhooks"])
 
         response = self._request_post(
-            'test_webhook', 
+            'test_webhook',
             '/atlassian_connect/webhook/jiraissue_created',
             json.dumps({
                 "key": "value",
