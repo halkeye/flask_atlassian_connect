@@ -193,18 +193,32 @@ class AtlassianConnect(object):
             return func(*args, **kwargs)
         return inner
 
-    def webhook(self, event, exclude_body=False, property_keys=None, **kwargs):
+    def webhook(self, event, exclude_body=False, **kwargs):
         """
-        Webhook decorator
+        Webhook decorator. See external_ documentation
 
         :param event:
-            Which event do we want to listen to
+            Specifies the named event you would like to listen to
+            (e.g., "enabled", "jira:issue_created", etc.)
         :type event: string
 
+        :param exclude_body:
+            Specifies if webhook will send JSON body when triggered.
+            By default, a webhook will send a request with a JSON body.
+        :type event: bool
+
         :param filter:
-            Any filters you want to use to prevent a webhook
-            from firing
+            Filter for entities that the webhook will be triggered for.
+            Refer to the documentation on filtering_ for details.
         :type event: string
+
+        :param propertyKeys:
+            Specifies entity properties which will be returned inside JSON body.
+            If not specified no properties will be returned.
+        :type event: array
+
+        .. _filtering: https://developer.atlassian.com/static/connect/docs/beta/modules/common/webhook.html#Filtering
+        .. _external: https://developer.atlassian.com/jiradev/jira-apis/webhooks
         """
         section = 'webhook'
 
@@ -215,8 +229,8 @@ class AtlassianConnect(object):
         }
         if kwargs.get('filter'):
             webhook["filter"] = kwargs.pop('filter')
-        if property_keys:
-            webhook["propertyKeys"] = property_keys
+        if kwargs.get('propertyKeys'):
+            webhook["propertyKeys"] = kwargs.pop('propertyKeys')
 
         self.descriptor.setdefault('modules', {}).setdefault(
             'webhooks', []).append(webhook)
