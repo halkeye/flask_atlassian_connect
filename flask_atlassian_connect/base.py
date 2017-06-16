@@ -6,35 +6,12 @@ from flask import abort, current_app, jsonify, redirect, request
 from jwt import decode
 from jwt.exceptions import DecodeError
 from requests import get
-
+from .default_client import Client
 
 def _relative_to_base(app, path):
     base = app.config['BASE_URL']
     path = '/' + path if not path.startswith('/') else path
     return base + path
-
-
-class Client(object):
-    """Reference implementation of Client object"""
-    _clients = {}
-
-    def __init__(self, **kwargs):
-        super(Client, self).__init__()
-        self.clientKey = None
-        self.sharedSecret = None
-        self.baseUrl = None
-        for k, v in kwargs.items():
-            setattr(self, k, v)
-
-    @staticmethod
-    def load(client_key):
-        """Loads a Client from the (internal) database"""
-        return Client._clients.get(client_key)
-
-    @staticmethod
-    def save(client):
-        """Save a client to the database"""
-        Client._clients[client.clientKey] = client
 
 
 class _SimpleAuthenticator(Authenticator):
@@ -91,7 +68,7 @@ class AtlassianConnect(object):
 
         :param app:
             App Object
-        :type app: flask.Flask
+        :type app: :py:class:`flask.Flask`
         """
         app.config.setdefault('BASE_URL', u"http://localhost:5000")
         app.route('/atlassian_connect/descriptor',
