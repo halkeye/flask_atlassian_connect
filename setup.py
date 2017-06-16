@@ -1,20 +1,30 @@
+"""
+Flask-AtlassianConnect
+-------------
+
+This is the description for that library
+"""
 import io
 import re
-from setuptools import setup, find_packages
 
-init_py = io.open('ac_flask/__init__.py').read()
+from setuptools import find_packages, setup
+
+init_py = io.open('flask_atlassian_connect/__init__.py').read()
 metadata = dict(re.findall("__([a-z]+)__ = '([^']+)'", init_py))
 metadata['doc'] = re.findall('"""(.+)"""', init_py)[0]
 
 setup(
-    name='AC_Flask',
+    name='Flask-AtlassianConnect',
     version=metadata['version'],
     description=metadata['doc'],
+    long_description=__doc__,
     author=metadata['author'],
     author_email=metadata['email'],
     url=metadata['url'],
     license=open('LICENSE.md').read(),
     packages=find_packages(),
+    zip_safe=False,
+    include_package_data=True,
     platforms='any',
     install_requires=io.open('requirements/runtime.txt').readlines(),
     setup_requires=['pytest-runner'],

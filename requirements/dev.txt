@@ -3,5 +3,6 @@ mock
 pytest
 pytest-cov
 pytest-mock
+pytest-xdist
 requests_mock
 codacy-coverage
