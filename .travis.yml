@@ -2,7 +2,6 @@ sudo: false
 language: python
 python:
 - '2.7'
-# - '3.6'
 before_install:
 - pip install --upgrade pip
 - pip install --upgrade setuptools
@@ -13,15 +12,19 @@ install:
 - python setup.py sdist
 - pip install -r requirements/dev.txt
 script:
-#- python setup.py test
 - py.test
 after_success:
 - coverage xml
 - python-codacy-coverage -r coverage.xml
-- pip install -r requirements/docs.txt
-- pip install --upgrade travis-sphinx
-- travis-sphinx --source=docs build
-- travis-sphinx deploy
+- invoke docs
+deploy:
+  provider: pages
+  skip_cleanup: true
+  local_dir: docs/build
+  on:
+    branch: master
+  github_token:
+    secure: X/epZglElyWXMS5Hz/4Me1xv4qZz783Mup7iMjZW8uR9B0UVkWmSaPSaKpNgU2ExbYW4yjiMeFmLXMO6i3XuQsUOue3a1QK0f6w//UPb4ZyMnPC6XBY+LG6b0jw9N86PRZt9/jvmhwvPfXOVWth8tmjb9WBRFVzakxpeDZ9A4Jg316BUdvNK0Pky4Nn7dqkYbrMed+34SyAT8gRraZ8vbuZm0tCoAfATHb2bDPZTae7aBesqrtu2kzuJ3KIGaYb1WCn7Rqzm1GS686zvzLapTi5mXIS8NKC83d1En9SAN1HrobhxEYOz260Ggoz2J0ZH4bZf5VAt4O8SCa23bboChpbKNGUlulgM0jHj3CdA1G2hctJq+rs0bRluKuYzSrmiRu3tYQAynIfzbknAARJGvfc3/CT6kRn9gf25BnCCO8uRHPkFMa5GDQrDE2d3YFaz5H1LfmtjV9mRD8zdCDtgc2bkMRNBrNPPUTgHWiPk5+aoY8CPFISZpEPFkwakOi/6KtPadYbyUegpNra+gxz5Es3o0S4QGQZAqNMNfxVXQQkLl2XgJdJx4P5Ys9Exz8E3VvZRy9V08WGQx9/U5OvxGYbpQNsrc1q8F9vkNBb3wLmdCaGEhbkHUsp8ZG5dcgli8SkP6YamjSCIWfJIDkgukavYRkZ3BYuA/vrpTjmM8x0=
 env:
   global:
     secure: B39Cnxz18v0z8LnNhab3Ef7Y+wM1NWUMoWtK0b4hcVTn0LhRjaIdH93Bd8vIzt0lZc9DN9j35Xen+LUSRTV+pnZOIINTWkr+WFM/lU4mcWQtiJb0yHpTnfrQ+rhlkwDnUdYzoMK6TIOLl0bh+894VWhtOZNDp6RjjlZxk0b77GAunVfTNxDO4xO44sg+1zXLOdwUN1VRbqLWvqwVW6bmEBM5GPJCjSQ7398OzVAIWkX3dBNrWrJ+vbckwGwKqqYbXMcDKx5wZx1Nu3I+ahXErADI62Yvy0DQWBftpkRR8HTlHb+GqqNrcPUZ9EMRw778hsNjvYT3wMk7nBDN5tvyo/pDcv33NwtZGn0TgKKhQhBTXdNfLmNAy9r2648Q08aLLDXKl2t4dHmkhi2GoGows/mLqp/vlBmEBa2TJtVL6X6HcGdt+3i6qSUXpBumqQLQuSUcnCi62RwTD9VNGl+buUH/uCoh7bIUO+9m0s0L1hHlvbBghVeNX/eegbIsx6rq/L3iOJ5/PxAK0g1ZfOvxCJrRADNOriewxqFNNXhdRlHnfl/Uk2QoXwojS+frtzN59FHmttilFPZWkAapNdrQnaoe6kbsZz6Yszlb8q7O6aTZDjj75xMeomcXE7H4AOmWzEOBvsrkpUQp7oVg9eWcDO8qUcwMRf6kMn+0eityrUs=
