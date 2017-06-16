@@ -7,6 +7,7 @@ before_install:
 - pip install --upgrade pip
 - pip install --upgrade setuptools
 - pip install --upgrade pytest
+- pip install --upgrade travis-sphinx
 - pip --version
 install:
 - python setup.py -q install
@@ -18,6 +19,9 @@ script:
 after_success:
 - coverage xml
 - python-codacy-coverage -r coverage.xml
+- pip install -r requirements/docs.txt
+- travis-sphinx --source=docs build
+- travis-sphinx deploy
 env:
   global:
     secure: B39Cnxz18v0z8LnNhab3Ef7Y+wM1NWUMoWtK0b4hcVTn0LhRjaIdH93Bd8vIzt0lZc9DN9j35Xen+LUSRTV+pnZOIINTWkr+WFM/lU4mcWQtiJb0yHpTnfrQ+rhlkwDnUdYzoMK6TIOLl0bh+894VWhtOZNDp6RjjlZxk0b77GAunVfTNxDO4xO44sg+1zXLOdwUN1VRbqLWvqwVW6bmEBM5GPJCjSQ7398OzVAIWkX3dBNrWrJ+vbckwGwKqqYbXMcDKx5wZx1Nu3I+ahXErADI62Yvy0DQWBftpkRR8HTlHb+GqqNrcPUZ9EMRw778hsNjvYT3wMk7nBDN5tvyo/pDcv33NwtZGn0TgKKhQhBTXdNfLmNAy9r2648Q08aLLDXKl2t4dHmkhi2GoGows/mLqp/vlBmEBa2TJtVL6X6HcGdt+3i6qSUXpBumqQLQuSUcnCi62RwTD9VNGl+buUH/uCoh7bIUO+9m0s0L1hHlvbBghVeNX/eegbIsx6rq/L3iOJ5/PxAK0g1ZfOvxCJrRADNOriewxqFNNXhdRlHnfl/Uk2QoXwojS+frtzN59FHmttilFPZWkAapNdrQnaoe6kbsZz6Yszlb8q7O6aTZDjj75xMeomcXE7H4AOmWzEOBvsrkpUQp7oVg9eWcDO8qUcwMRf6kMn+0eityrUs=
