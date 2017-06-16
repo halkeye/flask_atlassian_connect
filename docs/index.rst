@@ -42,6 +42,19 @@ Basic usage:
     if __name__ == '__main__':
         app.run()
 
+When your app is all up and running, access /atlassian_connect/descriptor
+to get to your atlassian connect descriptor file.
+
+Configuration
+=============
+
+    APP_NAME = 
+    ADDON_NAME = "Marketplace App Name"
+    ADDON_KEY = "Marketplace Addon Key"
+    ADDON_DESCRIPTION = "Description"
+    ADDON_VENDOR_URL = 'https://saucelabs.com'
+    ADDON_VENDOR_NAME = 'Sauce Labs'
+
 Customizing
 ===========
 
