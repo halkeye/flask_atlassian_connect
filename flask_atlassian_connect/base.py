@@ -22,7 +22,7 @@ class _SimpleAuthenticator(Authenticator):
         self.addon = addon
 
     def get_shared_secret(self, client_key):
-        """ . """
+        """ I actually don't fully understand this. Go see atlassian_jwt """
         client = self.addon.client_class.load(client_key)
         if client is None:
             raise Exception('No client for ' + client_key)
