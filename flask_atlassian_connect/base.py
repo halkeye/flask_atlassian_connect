@@ -6,7 +6,7 @@ from flask import abort, current_app, jsonify, request
 from jwt import decode
 from jwt.exceptions import DecodeError
 from requests import get
-from .default_client import Client
+from .client import AtlassianConnectClient
 
 
 def _relative_to_base(app, path):
@@ -39,7 +39,7 @@ class AtlassianConnect(object):
     You will need to provide a Client class that
     contains load(id) and save(client) methods.
     """
-    def __init__(self, app=None, client_class=Client):
+    def __init__(self, app=None, client_class=AtlassianConnectClient):
         self.app = app
         if app is not None:
             self.init_app(app)

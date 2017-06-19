@@ -4,7 +4,7 @@ import requests_mock
 import requests
 from flask import Flask
 from .. import AtlassianConnect
-from ..base import Client
+from ..base import AtlassianConnectClient
 from atlassian_jwt.encode import encode_token
 
 consumer_info_response = """<?xml version="1.0" encoding="UTF-8"?>
@@ -27,16 +27,17 @@ def decorator_a_string(**kwargs):
     del kwargs
     return '<h1>Something</h1>'
 
+
 def decorator_none(**kwargs):
     """This is a decorator that doesn't return"""
     del kwargs
 
 
-class _TestClient(Client):
+class _TestClient(AtlassianConnectClient):
     @staticmethod
     def reset():
         """Clear all clients out of internal storage"""
-        Client._clients = {}
+        AtlassianConnectClient._clients = {}
 
 
 class ACFlaskTestCase(unittest.TestCase):
@@ -223,7 +224,7 @@ class ACFlaskTestCase(unittest.TestCase):
             conditions=[{
                 "condition": "project_type",
                 "params": {"projectTypeKey": "service_desk"}
-                }])(decorator_a_string)
+            }])(decorator_a_string)
 
         response = self.client.get('/atlassian_connect/descriptor')
         self.assertEquals(200, response.status_code)

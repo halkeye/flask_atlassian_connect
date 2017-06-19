@@ -1,7 +1,7 @@
 """Contains a default Client object if nothing else is provided"""
 
 
-class Client(object):
+class AtlassianConnectClient(object):
     """
     Reference implementation of Client object
 
@@ -12,7 +12,7 @@ class Client(object):
     _clients = {}
 
     def __init__(self, **kwargs):
-        super(Client, self).__init__()
+        super(AtlassianConnectClient, self).__init__()
         self.clientKey = None
         self.sharedSecret = None
         self.baseUrl = None
@@ -28,7 +28,7 @@ class Client(object):
             jira/confluence clientKey to load from db
         :type app: string
         :type: Client or None"""
-        return Client._clients.get(client_key)
+        return AtlassianConnectClient._clients.get(client_key)
 
     @staticmethod
     def save(client):
@@ -38,4 +38,4 @@ class Client(object):
         :param client:
             Client object (Default Class or overriden class) to save
         :type app: object"""
-        Client._clients[client.clientKey] = client
+        AtlassianConnectClient._clients[client.clientKey] = client
