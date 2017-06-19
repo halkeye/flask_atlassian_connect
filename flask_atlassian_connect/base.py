@@ -1,12 +1,19 @@
 import re
 from functools import wraps
 
-from atlassian_jwt import Authenticator
-from flask import abort, current_app, jsonify, request
+from atlassian_jwt import Authenticator, encode_token
+from flask import abort, current_app, jsonify, request, g
 from jwt import decode
 from jwt.exceptions import DecodeError
 from requests import get
 from .client import AtlassianConnectClient
+
+try:
+    # python2
+    from urllib import urlencode
+except ImportError:
+    # python3
+    from urllib.parse import urlencode
 
 
 def _relative_to_base(app, path):
@@ -76,6 +83,25 @@ class AtlassianConnect(object):
                   methods=['GET'])(self._get_descriptor)
         app.route('/atlassian_connect/<section>/<name>',
                   methods=['GET', 'POST'])(self._handler_router)
+        app.context_processor(self._atlassian_jwt_post_token)
+
+    def _atlassian_jwt_post_token(self):
+        if not getattr(g, 'ac_client', None):
+            return dict()
+
+        args = request.args.copy()
+        try:
+            del args['jwt']
+        except KeyError:
+            pass
+
+        signature = encode_token(
+            'POST',
+            request.path + '?' + urlencode(args),
+            g.ac_client.clientKey,
+            g.ac_client.sharedSecret)
+        args['jwt'] = signature
+        return dict(atlassian_jwt_post_url=request.path + '?' + urlencode(args))
 
     def _get_descriptor(self):
         """Output atlassian connector descriptor file"""
@@ -113,6 +139,7 @@ class AtlassianConnect(object):
                 client = self.client_class.load(client_key)
                 if not client:
                     abort(401)
+                g.ac_client = client
                 kwargs['client'] = client
                 if kwargs_updator:
                     kwargs.update(kwargs_updator(**kwargs))

@@ -54,6 +54,10 @@ Configuration
     ADDON_DESCRIPTION = "Description"
     ADDON_VENDOR_URL = 'https://saucelabs.com'
     ADDON_VENDOR_NAME = 'Sauce Labs'
+Template Variables
+==================
+
+* atlassian_jwt_post_url - If used in your template form, it will automatically validate and pull client info again
 
 Customizing
 ===========

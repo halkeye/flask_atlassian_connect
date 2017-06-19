@@ -2,7 +2,7 @@ import unittest
 import json
 import requests_mock
 import requests
-from flask import Flask
+from flask import Flask, render_template_string
 from .. import AtlassianConnect
 from ..base import AtlassianConnectClient
 from atlassian_jwt.encode import encode_token
@@ -25,7 +25,7 @@ def decorator_noop(**kwargs):
 def decorator_a_string(**kwargs):
     """This is just a simple function to prove something happens"""
     del kwargs
-    return '<h1>Something</h1>'
+    return render_template_string('<h1>Something</h1> URL: {{atlassian_jwt_post_url}}')
 
 
 def decorator_none(**kwargs):
@@ -44,6 +44,7 @@ class ACFlaskTestCase(unittest.TestCase):
     """Test Case"""
     def setUp(self):
         self.app = Flask("app")
+        self.app.testing = True
         self.ac = AtlassianConnect(self.app, client_class=_TestClient)
         _TestClient.reset()
         self.client = self.app.test_client()
@@ -245,7 +246,7 @@ class ACFlaskTestCase(unittest.TestCase):
             'test_webpanel',
             '/atlassian_connect/webpanel/userPanel?issueKey=TEST-1')
         self.assertEquals(200, response.status_code)
-        self.assertEquals('<h1>Something</h1>', response.data)
+        self.assertIn('<h1>Something</h1>', response.data)
 
     def test_module(self):
         """Confirm webpanel decorator works right"""
@@ -274,7 +275,8 @@ class ACFlaskTestCase(unittest.TestCase):
             'test_decorator_return_values',
             '/atlassian_connect/webpanel/aString?issueKey=TEST-1')
         self.assertEquals(200, response.status_code)
-        self.assertEquals('<h1>Something</h1>', response.data)
+        self.assertIn('<h1>Something</h1>', response.data)
+        self.assertIn('/atlassian_connect/webpanel/aString?jwt=', response.data)
 
         response = self._request_get(
             'test_decorator_return_values',
