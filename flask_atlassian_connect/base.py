@@ -17,7 +17,7 @@ except ImportError:
 
 
 def _relative_to_base(app, path):
-    base = app.config['BASE_URL']
+    base = app.config.get('BASE_URL', '/')
     path = '/' + path if not path.startswith('/') else path
     return base + path
 
@@ -55,7 +55,6 @@ class AtlassianConnect(object):
             "description": app.config.get('ADDON_DESCRIPTION', ""),
             "key": app.config.get('ADDON_KEY'),
             "authentication": {"type": "jwt"},
-            "baseUrl": _relative_to_base(app, '/'),
             "scopes": app.config.get('ADDON_SCOPES', ["READ"]),
             "vendor": {
                 "name": app.config.get('ADDON_VENDOR_NAME'),
@@ -63,7 +62,6 @@ class AtlassianConnect(object):
             },
             "lifecycle": {},
             "links": {
-                "self": _relative_to_base(app, "/atlassian_connect/descriptor")
             },
         }
         self.client_class = client_class
@@ -105,6 +103,11 @@ class AtlassianConnect(object):
 
     def _get_descriptor(self):
         """Output atlassian connector descriptor file"""
+        app = self.app or current_app
+        self.descriptor["baseUrl"] = _relative_to_base(app, '/')
+        self.descriptor["links"]["self"] = _relative_to_base(
+            app, 
+            "/atlassian_connect/descriptor")
         return jsonify(self.descriptor)
 
     def _handler_router(self, section, name):
