@@ -79,7 +79,7 @@ Configuration
 Fallback Client Model
 `````````````````````
 
-.. autoclass:: Client
+.. autoclass:: AtlassianConnectClient
    :members:
 
 Licensing and Author

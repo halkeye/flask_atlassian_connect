@@ -419,3 +419,56 @@ class AtlassianConnect(object):
             'webPanels', []
         ).append(webpanel_capability)
         return self._provide_client_handler(section, key)
+
+    def tasks(self):
+        """Function that turns a collection of tasks
+        suitable for pyinvoke_
+
+        Example::
+
+            from app.web import ac
+            ns = Collection()
+            ns.add_collection(ac.tasks())
+
+        .. _pyinvoke: http://www.pyinvoke.org/
+        """
+        from invoke import task, Collection
+
+        @task
+        def list(ctx):
+            """Show all clients in the database"""
+            from json import dumps
+            with (self.app or current_app).app_context():
+                print dumps([
+                    dict(c) for c in self.client_class.all()
+                ])
+
+        @task
+        def show(ctx, clientKey):
+            """Lookup one client from the database"""
+            from json import dumps
+            with (self.app or current_app).app_context():
+                print dumps(dict(self.client_class.load(clientKey)))
+
+        @task
+        def install(ctx, data):
+            """Add a given client from the database"""
+            from json import loads
+            with (self.app or current_app).app_context():
+                client = loads(data)
+                self.client_class.save(client)
+                print "Added"
+
+        @task()
+        def uninstall(ctx, clientKey):
+            """Remove a given client from the database"""
+            with (self.app or current_app).app_context():
+                self.client_class.delete(clientKey)
+                print "Deleted"
+
+        ns = Collection('clients')
+        ns.add_task(list)
+        ns.add_task(show)
+        ns.add_task(install)
+        ns.add_task(uninstall)
+        return ns
