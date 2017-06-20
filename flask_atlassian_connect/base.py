@@ -106,7 +106,7 @@ class AtlassianConnect(object):
         app = self.app or current_app
         self.descriptor["baseUrl"] = _relative_to_base(app, '/')
         self.descriptor["links"]["self"] = _relative_to_base(
-            app, 
+            app,
             "/atlassian_connect/descriptor")
         return jsonify(self.descriptor)
 

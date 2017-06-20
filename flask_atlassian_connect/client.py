@@ -20,6 +20,25 @@ class AtlassianConnectClient(object):
             setattr(self, k, v)
 
     @staticmethod
+    def delete(client_key):
+        """
+        Removes a client from the database
+
+        :param client_key:
+            jira/confluence clientKey to load from db
+        :type app: string"""
+        del AtlassianConnectClient._clients[client_key]
+
+    @staticmethod
+    def all():
+        """
+        Returns a list of all clients stored in the database
+
+        :returns: list of all clients
+        :rtype: list"""
+        return AtlassianConnectClient._clients
+
+    @staticmethod
     def load(client_key):
         """
         Loads a Client from the (internal) database
@@ -27,7 +46,7 @@ class AtlassianConnectClient(object):
         :param client_key:
             jira/confluence clientKey to load from db
         :type app: string
-        :type: Client or None"""
+        :rtype: Client or None"""
         return AtlassianConnectClient._clients.get(client_key)
 
     @staticmethod
@@ -37,5 +56,5 @@ class AtlassianConnectClient(object):
 
         :param client:
             Client object (Default Class or overriden class) to save
-        :type app: object"""
+        :type app: Client"""
         AtlassianConnectClient._clients[client.clientKey] = client
