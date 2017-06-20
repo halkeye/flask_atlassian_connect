@@ -1,8 +1,11 @@
 """
 Flask-AtlassianConnect
--------------
+----------------------
 
-This is the description for that library
+This is a simple module to make creating atlassian connect based
+plugins easier
+
+See https://halkeye.github.io/flask_atlassian_connect/ for docs
 """
 import io
 import re
