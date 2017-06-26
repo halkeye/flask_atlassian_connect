@@ -1,4 +1,4 @@
-0.0.2 (unreleased)
+0.0.2 (2017-06-26)
 ------------------
 
 - Migrate away from requireing BASE_URL to be set and just use flask's own url handling [halkeye]

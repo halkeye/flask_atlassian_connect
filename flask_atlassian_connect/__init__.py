@@ -1,4 +1,4 @@
-__version__ = '0.0.2.dev0'
+__version__ = '0.0.2'
 __url__ = 'https://github.com/halkeye/flask_atlassian_connect'
 __author__ = 'Gavin Mogan'
 __email__ = 'opensource@gavinmogan.com'
