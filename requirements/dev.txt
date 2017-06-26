@@ -7,3 +7,5 @@ pytest-xdist
 requests_mock
 codacy-coverage
 invoke
+zest.releaser
+zest.releaser[recommended]
