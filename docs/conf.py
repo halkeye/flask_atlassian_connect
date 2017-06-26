@@ -38,8 +38,7 @@ extensions = ['sphinx.ext.autosummary',
               'sphinx.ext.todo',
               'sphinx.ext.githubpages',
               'sphinx.ext.coverage',
-              'sphinx.ext.ifconfig',
-              'releases']
+              'sphinx.ext.ifconfig']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
