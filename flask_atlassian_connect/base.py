@@ -2,7 +2,7 @@ import re
 from functools import wraps
 
 from atlassian_jwt import Authenticator, encode_token
-from flask import abort, current_app, jsonify, request, g
+from flask import abort, current_app, jsonify, request, g, url_for
 from jwt import decode
 from jwt.exceptions import DecodeError
 from requests import get
@@ -14,12 +14,6 @@ try:
 except ImportError:
     # python3
     from urllib.parse import urlencode
-
-
-def _relative_to_base(app, path):
-    base = app.config.get('BASE_URL', '/')
-    path = '/' + path if not path.startswith('/') else path
-    return base + path
 
 
 class _SimpleAuthenticator(Authenticator):
@@ -76,7 +70,6 @@ class AtlassianConnect(object):
             App Object
         :type app: :py:class:`flask.Flask`
         """
-        app.config.setdefault('BASE_URL', u"http://localhost:5000")
         app.route('/atlassian_connect/descriptor',
                   methods=['GET'])(self._get_descriptor)
         app.route('/atlassian_connect/<section>/<name>',
@@ -103,11 +96,11 @@ class AtlassianConnect(object):
 
     def _get_descriptor(self):
         """Output atlassian connector descriptor file"""
-        app = self.app or current_app
-        self.descriptor["baseUrl"] = _relative_to_base(app, '/')
-        self.descriptor["links"]["self"] = _relative_to_base(
-            app,
-            "/atlassian_connect/descriptor")
+        descriptor_external_link = url_for('_get_descriptor', _external=True)
+        descriptor_internal_link = url_for('_get_descriptor', _external=False)
+        self.descriptor["baseUrl"] = descriptor_external_link.replace(
+            descriptor_internal_link, '')
+        self.descriptor["links"]["self"] = descriptor_external_link
         return jsonify(self.descriptor)
 
     def _handler_router(self, section, name):
