@@ -1,2 +1,5 @@
 include README.md CHANGELOG.md LICENSE.md
 recursive-include requirements *.txt
+recursive-include docs *
+exclude tasks.py
+exclude requirements.txt

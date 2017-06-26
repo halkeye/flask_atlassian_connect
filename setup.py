@@ -30,15 +30,17 @@ setup(
     platforms='any',
     install_requires=io.open('requirements/runtime.txt').readlines(),
     setup_requires=['pytest-runner'],
+    keywords=['atlassian connect', 'flask', 'jira', 'confluence'],
     tests_require=filter(lambda x: not x.startswith('-'), io.open(
         'requirements/dev.txt').readlines()),
     classifiers=[
+        "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: Implementation :: PyPy",
         'Development Status :: 4 - Beta',
         'Environment :: Web Environment',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: Apache Software License',
         'Operating System :: OS Independent',
-        'Programming Language :: Python',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
         'Topic :: Software Development :: Libraries :: Python Modules'
     ]
