@@ -63,7 +63,7 @@ class AtlassianConnect(object):
             App Object
         :type app: :py:class:`flask.Flask`
         """
-        if self.app is None:
+        if self.app is not None:
             self.app = app
 
         app.route('/atlassian_connect/descriptor',
