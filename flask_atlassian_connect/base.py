@@ -63,6 +63,9 @@ class AtlassianConnect(object):
             App Object
         :type app: :py:class:`flask.Flask`
         """
+        if self.app is None:
+            self.app = app
+
         app.route('/atlassian_connect/descriptor',
                   methods=['GET'])(self._get_descriptor)
         app.route('/atlassian_connect/<section>/<name>',
