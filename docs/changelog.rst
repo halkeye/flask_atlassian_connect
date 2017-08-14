@@ -1,7 +1,7 @@
 0.0.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix support for late initializing app - [joshuajcoronado] #2
 
 
 0.0.2 (2017-06-26)
