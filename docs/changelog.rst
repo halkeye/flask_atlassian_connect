@@ -1,4 +1,4 @@
-0.0.3 (2017-08-14)
+0.0.4 (2017-08-14)
 ------------------
 
 - Fix support for late initializing app - [joshuajcoronado] #2
