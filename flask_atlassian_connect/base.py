@@ -42,22 +42,15 @@ class AtlassianConnect(object):
     """
     def __init__(self, app=None, client_class=AtlassianConnectClient):
         self.app = app
-        if app is not None:
-            self.init_app(app)
+
         self.descriptor = {
-            "name": app.config.get('ADDON_NAME', ""),
-            "description": app.config.get('ADDON_DESCRIPTION', ""),
-            "key": app.config.get('ADDON_KEY'),
             "authentication": {"type": "jwt"},
-            "scopes": app.config.get('ADDON_SCOPES', ["READ"]),
-            "vendor": {
-                "name": app.config.get('ADDON_VENDOR_NAME'),
-                "url": app.config.get('ADDON_VENDOR_URL')
-            },
             "lifecycle": {},
             "links": {
             },
         }
+        if app is not None:
+            self.init_app(app)
         self.client_class = client_class
         self.auth = _SimpleAuthenticator(addon=self)
         self.sections = {}
@@ -70,11 +63,27 @@ class AtlassianConnect(object):
             App Object
         :type app: :py:class:`flask.Flask`
         """
+        if self.app is not None:
+            self.app = app
+
         app.route('/atlassian_connect/descriptor',
                   methods=['GET'])(self._get_descriptor)
         app.route('/atlassian_connect/<section>/<name>',
                   methods=['GET', 'POST'])(self._handler_router)
         app.context_processor(self._atlassian_jwt_post_token)
+
+        app_descriptor = {
+            "name": app.config.get('ADDON_NAME', ""),
+            "description": app.config.get('ADDON_DESCRIPTION', ""),
+            "key": app.config.get('ADDON_KEY'),
+
+            "scopes": app.config.get('ADDON_SCOPES', ["READ"]),
+            "vendor": {
+                "name": app.config.get('ADDON_VENDOR_NAME'),
+                "url": app.config.get('ADDON_VENDOR_URL')
+            },
+        }
+        self.descriptor.update(app_descriptor)
 
     def _atlassian_jwt_post_token(self):
         if not getattr(g, 'ac_client', None):
