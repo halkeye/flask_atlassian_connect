@@ -291,5 +291,20 @@ class ACFlaskTestCase(unittest.TestCase):
         self.assertEquals('', response.data)
 
 
+
+class NoAppACFlaskTestCase(ACFlaskTestCase):
+    """Test Case"""
+    def setUp(self):
+        self.app = Flask("app")
+        self.app.testing = True
+        self.ac = AtlassianConnect(client_class=_TestClient)
+        _TestClient.reset()
+        self.client = self.app.test_client()
+        self.ac.lifecycle('installed')(decorator_noop)
+        self.ac.init_app(self.app)
+
+    def tearDown(self):
+        pass
+
 if __name__ == '__main__':
     unittest.main()
