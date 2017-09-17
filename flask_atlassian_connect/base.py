@@ -10,7 +10,7 @@ from .client import AtlassianConnectClient
 
 try:
     # python2
-    from urllib import urlencode
+    from urllib.parse import urlencode
 except ImportError:
     # python3
     from urllib.parse import urlencode
@@ -122,7 +122,7 @@ class AtlassianConnect(object):
         if method is None:
             (self.app or current_app).logger.error(
                 'Invalid handler for %s -- %s' % (section, name))
-            print (section, name, self.sections)
+            print((section, name, self.sections))
             abort(404)
         ret = method()
         if ret is not None:
@@ -441,16 +441,16 @@ class AtlassianConnect(object):
             """Show all clients in the database"""
             from json import dumps
             with (self.app or current_app).app_context():
-                print dumps([
+                print(dumps([
                     dict(c) for c in self.client_class.all()
-                ])
+                ]))
 
         @task
         def show(ctx, clientKey):
             """Lookup one client from the database"""
             from json import dumps
             with (self.app or current_app).app_context():
-                print dumps(dict(self.client_class.load(clientKey)))
+                print(dumps(dict(self.client_class.load(clientKey))))
 
         @task
         def install(ctx, data):
@@ -459,14 +459,14 @@ class AtlassianConnect(object):
             with (self.app or current_app).app_context():
                 client = loads(data)
                 self.client_class.save(client)
-                print "Added"
+                print("Added")
 
         @task()
         def uninstall(ctx, clientKey):
             """Remove a given client from the database"""
             with (self.app or current_app).app_context():
                 self.client_class.delete(clientKey)
-                print "Deleted"
+                print("Deleted")
 
         ns = Collection('clients')
         ns.add_task(list)

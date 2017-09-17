@@ -31,8 +31,8 @@ setup(
     install_requires=io.open('requirements/runtime.txt').readlines(),
     setup_requires=['pytest-runner'],
     keywords=['atlassian connect', 'flask', 'jira', 'confluence'],
-    tests_require=filter(lambda x: not x.startswith('-'), io.open(
-        'requirements/dev.txt').readlines()),
+    tests_require=[x for x in io.open(
+        'requirements/dev.txt').readlines() if not x.startswith('-')],
     classifiers=[
         "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: Implementation :: PyPy",
