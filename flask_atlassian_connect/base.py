@@ -10,7 +10,7 @@ from .client import AtlassianConnectClient
 
 try:
     # python2
-    from urllib.parse import urlencode
+    from urllib import urlencode
 except ImportError:
     # python3
     from urllib.parse import urlencode
