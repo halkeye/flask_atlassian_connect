@@ -16,7 +16,7 @@ class AtlassianConnectClient(object):
         self.clientKey = None
         self.sharedSecret = None
         self.baseUrl = None
-        for k, v in kwargs.items():
+        for k, v in list(kwargs.items()):
             setattr(self, k, v)
 
     @staticmethod

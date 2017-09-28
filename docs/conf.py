@@ -53,9 +53,9 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Flask-AtlassianConnect'
-copyright = u'2017, Gavin Mogan'
-author = u'Gavin Mogan'
+project = 'Flask-AtlassianConnect'
+copyright = '2017, Gavin Mogan'
+author = 'Gavin Mogan'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -148,8 +148,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'flask_atlassian_connect.tex', u'flask_atlassian_connect Documentation',
-     u'Gavin Mogan', 'manual'),
+    (master_doc, 'flask_atlassian_connect.tex', 'flask_atlassian_connect Documentation',
+     'Gavin Mogan', 'manual'),
 ]
 
 
@@ -158,7 +158,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'flask_atlassian_connect', u'flask_atlassian_connect Documentation',
+    (master_doc, 'flask_atlassian_connect', 'flask_atlassian_connect Documentation',
      [author], 1)
 ]
 
@@ -169,7 +169,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'flask_atlassian_connect', u'flask_atlassian_connect Documentation',
+    (master_doc, 'flask_atlassian_connect', 'flask_atlassian_connect Documentation',
      author, 'flask_atlassian_connect', 'One line description of project.',
      'Miscellaneous'),
 ]

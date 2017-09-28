@@ -90,8 +90,8 @@ class ACFlaskTestCase(unittest.TestCase):
     def test_descriptor_stuff(self):
         """Grab the descriptor and make sure its valid"""
         response = self.client.get('/atlassian_connect/descriptor')
-        self.assertEquals(200, response.status_code)
-        self.assertEquals(
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(
             {"type": "jwt"},
             json.loads(response.get_data())['authentication']
         )
@@ -99,7 +99,7 @@ class ACFlaskTestCase(unittest.TestCase):
     @unittest.skip("slow")
     def test_descriptor_should_validate(self):
         rv = self.client.get('/atlassian_connect/descriptor')
-        self.assertEquals(200, rv.status_code)
+        self.assertEqual(200, rv.status_code)
         rv = requests.post(
             'https://atlassian-connect-validator.herokuapp.com/validate',
             data={'descriptor': rv.data, 'product': 'jira'}
@@ -119,7 +119,7 @@ class ACFlaskTestCase(unittest.TestCase):
                 '/atlassian_connect/lifecycle/installed',
                 data=json.dumps(client),
                 content_type='application/json')
-            self.assertEquals(204, response.status_code)
+            self.assertEqual(204, response.status_code)
 
     def test_lifecycle_installed_multiple_no_auth(self):
         """Multiple requests should fail unless auth is provided the second time"""
@@ -134,11 +134,11 @@ class ACFlaskTestCase(unittest.TestCase):
             rv = self.client.post('/atlassian_connect/lifecycle/installed',
                                   data=json.dumps(client),
                                   content_type='application/json')
-            self.assertEquals(204, rv.status_code)
+            self.assertEqual(204, rv.status_code)
             rv = self.client.post('/atlassian_connect/lifecycle/installed',
                                   data=json.dumps(client),
                                   content_type='application/json')
-            self.assertEquals(401, rv.status_code)
+            self.assertEqual(401, rv.status_code)
 
     def test_lifecycle_installed_multiple_with_auth(self):
         """Multiple requests  should update if the second time has auth"""
@@ -154,7 +154,7 @@ class ACFlaskTestCase(unittest.TestCase):
             rv = self.client.post('/atlassian_connect/lifecycle/installed',
                                   data=json.dumps(client),
                                   content_type='application/json')
-            self.assertEquals(204, rv.status_code)
+            self.assertEqual(204, rv.status_code)
             # Add auth
             auth = encode_token(
                 'GET',
@@ -165,7 +165,7 @@ class ACFlaskTestCase(unittest.TestCase):
                                   data=json.dumps(client),
                                   content_type='application/json',
                                   headers={'Authorization': 'JWT ' + auth})
-            self.assertEquals(204, rv.status_code)
+            self.assertEqual(204, rv.status_code)
 
     @requests_mock.Mocker()
     def test_lifecycle_installed_multiple_invalid_auth(self, m):
@@ -180,7 +180,7 @@ class ACFlaskTestCase(unittest.TestCase):
         rv = self.client.post('/atlassian_connect/lifecycle/installed',
                               data=json.dumps(client),
                               content_type='application/json')
-        self.assertEquals(204, rv.status_code)
+        self.assertEqual(204, rv.status_code)
         # Add auth
         auth = encode_token(
             'GET',
@@ -191,20 +191,20 @@ class ACFlaskTestCase(unittest.TestCase):
                               data=json.dumps(client),
                               content_type='application/json',
                               headers={'Authorization': 'JWT ' + auth})
-        self.assertEquals(401, rv.status_code)
+        self.assertEqual(401, rv.status_code)
 
     def test_webook(self):
         self.ac.webhook('jira:issue_created', filter="project is 'IM'")(
             decorator_noop)
 
         response = self.client.get('/atlassian_connect/descriptor')
-        self.assertEquals(200, response.status_code)
+        self.assertEqual(200, response.status_code)
         self.assertIn({
-            u"event": u"jira:issue_created",
-            u"excludeBody": False,
-            u"filter": u"project is 'IM'",
-            u"url": u"/atlassian_connect/webhook/jiraissue_created"
-        }, json.loads(response.data)["modules"]["webhooks"])
+            "event": "jira:issue_created",
+            "excludeBody": False,
+            "filter": "project is 'IM'",
+            "url": "/atlassian_connect/webhook/jiraissue_created"
+        }, json.loads(response.get_data(as_text=True))["modules"]["webhooks"])
 
         response = self._request_post(
             'test_webhook',
@@ -214,7 +214,7 @@ class ACFlaskTestCase(unittest.TestCase):
                 "foo": "bar"
             })  # FIXME - not a real event
         )
-        self.assertEquals(204, response.status_code)
+        self.assertEqual(204, response.status_code)
 
     def test_webpanel(self):
         """Confirm webpanel decorator works right"""
@@ -228,7 +228,7 @@ class ACFlaskTestCase(unittest.TestCase):
             }])(decorator_a_string)
 
         response = self.client.get('/atlassian_connect/descriptor')
-        self.assertEquals(200, response.status_code)
+        self.assertEqual(200, response.status_code)
         self.assertIn({
             "conditions": [
                 {
@@ -240,30 +240,30 @@ class ACFlaskTestCase(unittest.TestCase):
             "location": "atl.jira.view.issue.right.context",
             "name": {"value": "Bamboo Employee Information"},
             "url": "/atlassian_connect/webpanel/userPanel?issueKey={issue.key}"
-        }, json.loads(response.data)["modules"]["webPanels"])
+        }, json.loads(response.get_data(as_text=True))["modules"]["webPanels"])
 
         response = self._request_get(
             'test_webpanel',
             '/atlassian_connect/webpanel/userPanel?issueKey=TEST-1')
-        self.assertEquals(200, response.status_code)
-        self.assertIn('<h1>Something</h1>', response.data)
+        self.assertEqual(200, response.status_code)
+        self.assertIn('<h1>Something</h1>', response.get_data(as_text=True))
 
     def test_module(self):
         """Confirm webpanel decorator works right"""
         self.ac.module(name="Configure", key="configurePage")(decorator_noop)
 
         response = self.client.get('/atlassian_connect/descriptor')
-        self.assertEquals(200, response.status_code)
-        self.assertEquals({
-            u"key": u"configurePage",
-            u"name": {u"value": u"Configure"},
-            u"url": "/atlassian_connect/module/configurePage"
-        }, json.loads(response.data)["modules"]["configurePage"])
+        self.assertEqual(200, response.status_code)
+        self.assertEqual({
+            "key": "configurePage",
+            "name": {"value": "Configure"},
+            "url": "/atlassian_connect/module/configurePage"
+        }, json.loads(response.get_data(as_text=True))["modules"]["configurePage"])
 
         response = self._request_get(
             'test_module',
             "/atlassian_connect/module/configurePage")
-        self.assertEquals(204, response.status_code)
+        self.assertEqual(204, response.status_code)
 
     def test_decorator_return_values(self):
         """Confirm webpanel decorator works right"""
@@ -274,21 +274,22 @@ class ACFlaskTestCase(unittest.TestCase):
         response = self._request_get(
             'test_decorator_return_values',
             '/atlassian_connect/webpanel/aString?issueKey=TEST-1')
-        self.assertEquals(200, response.status_code)
-        self.assertIn('<h1>Something</h1>', response.data)
-        self.assertIn('/atlassian_connect/webpanel/aString?jwt=', response.data)
+        self.assertEqual(200, response.status_code)
+        self.assertIn('<h1>Something</h1>', response.get_data(as_text=True))
+        self.assertIn('/atlassian_connect/webpanel/aString?', response.get_data(as_text=True))
+        self.assertIn('jwt=', response.get_data(as_text=True))
 
         response = self._request_get(
             'test_decorator_return_values',
             '/atlassian_connect/webpanel/noop?issueKey=TEST-1')
-        self.assertEquals(204, response.status_code)
-        self.assertEquals('', response.data)
+        self.assertEqual(204, response.status_code)
+        self.assertEqual('', response.get_data(as_text=True))
 
         response = self._request_get(
             'test_decorator_return_values',
             '/atlassian_connect/webpanel/none?issueKey=TEST-1')
-        self.assertEquals(204, response.status_code)
-        self.assertEquals('', response.data)
+        self.assertEqual(204, response.status_code)
+        self.assertEqual('', response.get_data(as_text=True))
 
 
 
