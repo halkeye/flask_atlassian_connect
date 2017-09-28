@@ -1,4 +1,4 @@
-0.0.5 (unreleased)
+0.0.5 (2017-09-28)
 ------------------
 
 - Python3 fixes - [brad-alexander] #3
