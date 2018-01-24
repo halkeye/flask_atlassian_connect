@@ -28,7 +28,7 @@ pipeline {
     }
     stage('Docs') {
       steps {
-        sh 'invokce docs'
+        sh 'invoke docs'
       }
     }
   }
