@@ -1,0 +1,413 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Flask-AtlassianConnect &#8212; Flask-AtlassianConnect 0.0.6.dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.0.6.dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+  </head>
+  <body>
+  
+  
+  <div class=indexwrapper>
+  
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-flask_atlassian_connect">
+<span id="flask-atlassianconnect"></span><h1>Flask-AtlassianConnect<a class="headerlink" href="#module-flask_atlassian_connect" title="Permalink to this headline">¶</a></h1>
+<p>Flask-AtlassianConnect helps to do all the heavy lifting for creating Atlassian Connect
+based integrations using a <a class="reference external" href="http://flask.pocoo.org/">Flask</a> application</p>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>Install Flask-AtlassianConnect with <code class="docutils literal"><span class="pre">pip</span></code> command:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ pip install Flask-AtlassianConnect
+</pre></div>
+</div>
+<p>or check out development version:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ git clone git://github.com/halkeye/flask_atlassian_connect.git
+</pre></div>
+</div>
+</div>
+<div class="section" id="how-to-use">
+<h2>How to Use<a class="headerlink" href="#how-to-use" title="Permalink to this headline">¶</a></h2>
+<p>Flask-AtlassianConnect is pretty easy to use. You give it a flask application.
+Tell it where to save/load installation info from, and the rest are simple decorators</p>
+<p>Basic usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span>
+<span class="kn">from</span> <span class="nn">flask_atlassian_connect</span> <span class="kn">import</span> <span class="n">AtlassianConnect</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">ac</span> <span class="o">=</span> <span class="n">AtlassianConnect</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
+
+<span class="nd">@ac.webhook</span><span class="p">(</span><span class="s1">&#39;jira:issue_created&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">handle_jira_issue_created</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>When your app is all up and running, access /atlassian_connect/descriptor
+to get to your atlassian connect descriptor file.</p>
+</div>
+<div class="section" id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>APP_NAME =</li>
+<li>ADDON_NAME = “Marketplace App Name”</li>
+<li>ADDON_KEY = “Marketplace Addon Key”</li>
+<li>ADDON_DESCRIPTION = “Description”</li>
+<li>ADDON_VENDOR_URL = ‘<a class="reference external" href="https://saucelabs.com">https://saucelabs.com</a>’</li>
+<li>ADDON_VENDOR_NAME = ‘Sauce Labs’</li>
+</ul>
+</div>
+<div class="section" id="template-variables">
+<h2>Template Variables<a class="headerlink" href="#template-variables" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>atlassian_jwt_post_url - If used in your template form, it will automatically validate and pull client info again</li>
+</ul>
+</div>
+<div class="section" id="customizing">
+<h2>Customizing<a class="headerlink" href="#customizing" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="decorators">
+<h3>Decorators<a class="headerlink" href="#decorators" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="api">
+<h2>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id1">
+<h3>Configuration<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="flask_atlassian_connect.AtlassianConnect">
+<em class="property">class </em><code class="descclassname">flask_atlassian_connect.</code><code class="descname">AtlassianConnect</code><span class="sig-paren">(</span><em>app=None</em>, <em>client_class=&lt;class ‘flask_atlassian_connect.client.AtlassianConnectClient’&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#flask_atlassian_connect.AtlassianConnect" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is used to make creating an Atlassian Connect based
+addon a lot simplier and more straight forward. It takes care of all
+the authentication and authorization for you.</p>
+<p>You will need to provide a Client class that
+contains load(id) and save(client) methods.</p>
+<dl class="method">
+<dt id="flask_atlassian_connect.AtlassianConnect.init_app">
+<code class="descname">init_app</code><span class="sig-paren">(</span><em>app</em><span class="sig-paren">)</span><a class="headerlink" href="#flask_atlassian_connect.AtlassianConnect.init_app" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize Application object stuff</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>app</strong> (<a class="reference external" href="http://flask.pocoo.org/docs/api/#flask.Flask" title="(in Flask v0.13-dev)"><code class="xref py py-class docutils literal"><span class="pre">flask.Flask</span></code></a>) – App Object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="flask_atlassian_connect.AtlassianConnect.lifecycle">
+<code class="descname">lifecycle</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#flask_atlassian_connect.AtlassianConnect.lifecycle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lifecycle decorator. See <a class="reference external" href="https://developer.atlassian.com/static/connect/docs/beta/modules/lifecycle.html">external lifecycle</a> documentation</p>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nd">@ac</span><span class="o">.</span><span class="n">lifecycle</span><span class="p">(</span><span class="s2">&quot;installed&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">lifecycle_installed</span><span class="p">(</span><span class="n">client</span><span class="p">):</span>
+    <span class="nb">print</span> <span class="s2">&quot;New client installed!!!!&quot;</span>
+    <span class="nb">print</span> <span class="n">client</span>
+</pre></div>
+</div>
+<p>Payload:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;key&quot;</span><span class="p">:</span> <span class="s2">&quot;installed-addon-key&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;clientKey&quot;</span><span class="p">:</span> <span class="s2">&quot;unique-client-identifier&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;sharedSecret&quot;</span><span class="p">:</span> <span class="s2">&quot;a-secret-key-not-to-be-lost&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;serverVersion&quot;</span><span class="p">:</span> <span class="s2">&quot;server-version&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;pluginsVersion&quot;</span><span class="p">:</span> <span class="s2">&quot;version-of-connect&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;baseUrl&quot;</span><span class="p">:</span> <span class="s2">&quot;http://example.atlassian.net&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;productType&quot;</span><span class="p">:</span> <span class="s2">&quot;jira&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Atlassian JIRA at https://example.atlassian.net&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;serviceEntitlementNumber&quot;</span><span class="p">:</span> <span class="s2">&quot;SEN-number&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;eventType&quot;</span><span class="p">:</span> <span class="s2">&quot;installed&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) – <p>Which atlassian connect lifecycle to handle.</p>
+<dl class="docutils">
+<dt>At time of writing, the following are the only options:</dt>
+<dd><ul class="first last simple">
+<li>installed</li>
+<li>uninstalled</li>
+<li>enabled</li>
+<li>disabled</li>
+</ul>
+</dd>
+</dl>
+<p>Each of the above will call your Client’s save and load methods</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="flask_atlassian_connect.AtlassianConnect.module">
+<code class="descname">module</code><span class="sig-paren">(</span><em>key</em>, <em>name=None</em>, <em>location=None</em><span class="sig-paren">)</span><a class="headerlink" href="#flask_atlassian_connect.AtlassianConnect.module" title="Permalink to this definition">¶</a></dt>
+<dd><p>Module decorator. See <a class="reference external" href="https://developer.atlassian.com/static/connect/docs/beta/modules/common/web-section.html">external modules</a> documentation</p>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nd">@ac</span><span class="o">.</span><span class="n">module</span><span class="p">(</span><span class="s2">&quot;configurePage&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Configure&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">configure_page</span><span class="p">(</span><span class="n">client</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s1">&#39;&lt;h1&gt;Configure Page&lt;/h1&gt;&#39;</span><span class="p">,</span> <span class="mi">200</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>key</strong> – <p>A key to identify this module.</p>
+<p>This key must be unique relative to the add on, with the exception
+of Confluence macros: Their keys need to be globally unique.</p>
+<p>Keys must only contain alphanumeric characters and dashes.</p>
+</li>
+<li><strong>location</strong> – The location in the application interface where the web section
+should appear.
+For the Atlassian application interface, a location is something
+like the coordinates on a map.
+It points to a particular drop-down menu or navigation list in
+the UI.</li>
+<li><strong>name</strong> – A human readable name.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="flask_atlassian_connect.AtlassianConnect.tasks">
+<code class="descname">tasks</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flask_atlassian_connect.AtlassianConnect.tasks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function that turns a collection of tasks
+suitable for <a class="reference external" href="http://www.pyinvoke.org/">pyinvoke</a></p>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">app.web</span> <span class="k">import</span> <span class="n">ac</span>
+<span class="n">ns</span> <span class="o">=</span> <span class="n">Collection</span><span class="p">()</span>
+<span class="n">ns</span><span class="o">.</span><span class="n">add_collection</span><span class="p">(</span><span class="n">ac</span><span class="o">.</span><span class="n">tasks</span><span class="p">())</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="flask_atlassian_connect.AtlassianConnect.webhook">
+<code class="descname">webhook</code><span class="sig-paren">(</span><em>event</em>, <em>exclude_body=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#flask_atlassian_connect.AtlassianConnect.webhook" title="Permalink to this definition">¶</a></dt>
+<dd><p>Webhook decorator. See <a class="reference external" href="https://developer.atlassian.com/jiradev/jira-apis/webhooks">external webhooks</a> documentation</p>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nd">@ac</span><span class="o">.</span><span class="n">webhook</span><span class="p">(</span><span class="s2">&quot;jira:issue_created&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">jira_issue_created</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+    <span class="nb">print</span> <span class="s2">&quot;An issue was just created!&quot;</span>
+    <span class="nb">print</span> <span class="s2">&quot;Take a look at this:&quot;</span>
+    <span class="nb">print</span> <span class="n">event</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>event</strong> (<a class="reference external" href="https://docs.python.org/2/library/array.html#module-array" title="(in Python v2.7)"><em>array</em></a>) – Specifies the named event you would like to listen to
+(e.g., “enabled”, “jira:issue_created”, etc.)</li>
+<li><strong>exclude_body</strong> – Specifies if webhook will send JSON body when triggered.
+By default, a webhook will send a request with a JSON body.</li>
+<li><strong>filter</strong> – Filter for entities that the webhook will be triggered for.
+Refer to the documentation on <a class="reference external" href="https://developer.atlassian.com/static/connect/docs/beta/modules/common/webhook.html#Filtering">filtering</a> for details.</li>
+<li><strong>propertyKeys</strong> – Specifies entity properties which will be returned inside JSON body.
+If not specified no properties will be returned.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="flask_atlassian_connect.AtlassianConnect.webpanel">
+<code class="descname">webpanel</code><span class="sig-paren">(</span><em>key</em>, <em>name=None</em>, <em>location=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#flask_atlassian_connect.AtlassianConnect.webpanel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Webpanel decorator. See <a class="reference external" href="https://developer.atlassian.com/static/connect/docs/beta/modules/common/web-panel.html">external webpanel</a> documentation</p>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nd">@ac</span><span class="o">.</span><span class="n">webpanel</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;userPanel&quot;</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Employee Information&quot;</span><span class="p">,</span>
+    <span class="n">location</span><span class="o">=</span><span class="s2">&quot;atl.jira.view.issue.right.context&quot;</span><span class="p">,</span>
+    <span class="n">conditions</span><span class="o">=</span><span class="p">[{</span>
+        <span class="s2">&quot;condition&quot;</span><span class="p">:</span> <span class="s2">&quot;project_type&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;projectTypeKey&quot;</span><span class="p">:</span> <span class="s2">&quot;service_desk&quot;</span><span class="p">}</span>
+    <span class="p">}])</span>
+<span class="k">def</span> <span class="nf">employee_information_panel</span><span class="p">(</span><span class="n">client</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s1">&#39;this is issue </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;issueKey&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>key</strong> – <p>A key to identify this module.</p>
+<p>This key must be unique relative to the add on, with the exception
+of Confluence macros: Their keys need to be globally unique.</p>
+<p>Keys must only contain alphanumeric characters and dashes.</p>
+</li>
+<li><strong>location</strong> – The location in the application interface where the web section
+should appear.
+For the Atlassian application interface, a location is something
+like the coordinates on a map.
+It points to a particular drop-down menu or navigation list in
+the UI.</li>
+<li><strong>name</strong> – A human readable name.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Anything else from the <a class="reference external" href="https://developer.atlassian.com/static/connect/docs/beta/modules/common/web-panel.html">external webpanel</a> docs should also work</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="fallback-client-model">
+<h3>Fallback Client Model<a class="headerlink" href="#fallback-client-model" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="flask_atlassian_connect.AtlassianConnectClient">
+<em class="property">class </em><code class="descclassname">flask_atlassian_connect.</code><code class="descname">AtlassianConnectClient</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#flask_atlassian_connect.AtlassianConnectClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reference implementation of Client object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>clientKey</strong> – Confluence/Jira/Etc Unique Identifier</li>
+<li><strong>sharedSecret</strong> – Shared secret between instance and addon</li>
+<li><strong>baseUrl</strong> – Url for Confluence/Jira/Etc</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="staticmethod">
+<dt id="flask_atlassian_connect.AtlassianConnectClient.all">
+<em class="property">static </em><code class="descname">all</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flask_atlassian_connect.AtlassianConnectClient.all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of all clients stored in the database</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of all clients</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="flask_atlassian_connect.AtlassianConnectClient.delete">
+<em class="property">static </em><code class="descname">delete</code><span class="sig-paren">(</span><em>client_key</em><span class="sig-paren">)</span><a class="headerlink" href="#flask_atlassian_connect.AtlassianConnectClient.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes a client from the database</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>client_key</strong> – jira/confluence clientKey to load from db</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="flask_atlassian_connect.AtlassianConnectClient.load">
+<em class="property">static </em><code class="descname">load</code><span class="sig-paren">(</span><em>client_key</em><span class="sig-paren">)</span><a class="headerlink" href="#flask_atlassian_connect.AtlassianConnectClient.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads a Client from the (internal) database</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>client_key</strong> – jira/confluence clientKey to load from db</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Client or <a class="reference external" href="https://docs.python.org/2/library/constants.html#None" title="(in Python v2.7)">None</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="flask_atlassian_connect.AtlassianConnectClient.save">
+<em class="property">static </em><code class="descname">save</code><span class="sig-paren">(</span><em>client</em><span class="sig-paren">)</span><a class="headerlink" href="#flask_atlassian_connect.AtlassianConnectClient.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save a client to the database</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>client</strong> – Client object (Default Class or overriden class) to save</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="licensing-and-author">
+<h2>Licensing and Author<a class="headerlink" href="#licensing-and-author" title="Permalink to this headline">¶</a></h2>
+<p>This project is licensed under <a class="reference external" href="https://en.wikipedia.org/wiki/Apache_License">Apache2</a>. See <a class="reference external" href="https://github.com/halkeye/flask_atlassian_connect/blob/master/LICENSE.md">LICENSE</a> for the details.</p>
+<p>I’m <a class="reference external" href="http://www.gavinmogan.com/">Gavin Mogan</a>. Feel free to open tickets if you need help. This was something that worked for me so I thought I’d share.</p>
+</div>
+<div class="section" id="indices-and-tables">
+<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+    <a href="http://github.com/halkeye/flask_atlassian_connect"><img style="position: fixed; top: 0; right: 0; border: 0;"
+    src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
+  
+
+  
+  </div>
+  
+
+  </body>
+</html>
