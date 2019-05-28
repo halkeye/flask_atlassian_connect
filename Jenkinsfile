@@ -54,15 +54,15 @@ pipeline {
         DEPLOY_BRANCH = 'gh-pages'
       }
       steps {
-        sh "git worktree add -B ${env.DEPLOY_BRANCH} ${env.DEPLOY_DIRECTORY} origin/${env.DEPLOY_BRANCH}"
-        sh "rm -rf ${env.DEPLOY_DIRECTORY}/*"
+        sh "git clone --single-branch --branch ${env.DEPLOY_BRANCH} ${env.GIT_URL.replace("https://", "https://${GITHUB_USR}:${GITHUB_PSW}@")} ${env.DEPLOY_BRANCH}"
+        sh "rm -rf ${env.DEPLOY_BRANCH}/*"
+        sh "cp -a ${env.DEPLOY_DIRECTORY}/* ${env.DEPLOY_BRANCH}/"
 
-        dir(env.DEPLOY_DIRECTORY) {
+        dir(env.DEPLOY_BRAHCH) {
           sh 'git add --all && git commit -m "Publishing to gh-pages"'
-          sh "git remote add deploy ${env.GIT_URL.replace("https://", "https://${GITHUB_USR}:${GITHUB_PSW}@")}"
-          sh "git push deploy"
-          sh "git remote remove deploy"
+          sh "git push"
         }
+        sh "rm -rf ${env.DEPLOY_BRANCH}"
       }
     }
   }
