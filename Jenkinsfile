@@ -25,6 +25,8 @@ pipeline {
     stage('Install') {
       steps {
         sh """
+          ls -l
+          pwd
           python setup.py -q install
           python setup.py sdist
           pip install -r requirements/dev.txt
