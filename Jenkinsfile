@@ -65,8 +65,7 @@ pipeline {
 
         dir(env.DEPLOY_DIRECTORY) {
           sh 'git add --all && git commit -m "Publishing to gh-pages"'
-          newUrl = env.GIT_URL.replace("https://", "https://${GITHUB_USR}:${GITHUB_PSW}@");
-          sh "git remote add deploy ${newUrl}"
+          sh "git remote add deploy ${env.GIT_URL.replace("https://", "https://${GITHUB_USR}:${GITHUB_PSW}@")}"
           sh "git push deploy"
           sh "git remote remove deploy"
         }
