@@ -46,12 +46,6 @@ pipeline {
       }
     }
 
-    stage('Deploy Docs (Surge)') {
-      when { branch 'master' }
-      environment { SURGE = credentials('halkeye-surge') }
-      steps { sh 'SURGE_LOGIN=$SURGE_USR SURGE_TOKEN=$SURGE_PSW npx surge -p docs/build -d flask-atlassian-connect.surge.sh' }
-    }
-
     stage('Deploy Docs (Github)') {
       when { branch 'master' }
       environment {
