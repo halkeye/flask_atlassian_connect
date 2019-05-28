@@ -21,6 +21,7 @@ pipeline {
           """
       }
     }
+
     stage('Install') {
       steps {
         sh """
@@ -36,11 +37,13 @@ pipeline {
         sh 'py.test'
       }
     }
+
     stage('Docs') {
       steps {
         sh 'invoke docs'
       }
     }
+
     stage('Deploy Docs') {
       when { branch 'master' }
       environment { SURGE = credentials('halkeye-surge') }
