@@ -25,8 +25,6 @@ pipeline {
     stage('Install') {
       steps {
         sh """
-          ls -l
-          pwd
           python setup.py -q install
           python setup.py sdist
           pip install -r requirements/dev.txt
@@ -58,7 +56,7 @@ pipeline {
         sh "rm -rf ${env.DEPLOY_BRANCH}/*"
         sh "cp -a ${env.DEPLOY_DIRECTORY}/* ${env.DEPLOY_BRANCH}/"
 
-        dir(env.DEPLOY_BRAHCH) {
+        dir(env.DEPLOY_BRANCH) {
           sh 'git add --all && git commit -m "Publishing to gh-pages"'
           sh "git push"
         }
