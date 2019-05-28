@@ -42,15 +42,34 @@ pipeline {
 
     stage('Docs') {
       steps {
-        sh 'invoke docs'
+        sh "invoke docs"
       }
     }
 
-    stage('Deploy Docs') {
+    stage('Deploy Docs (Surge)') {
       when { branch 'master' }
       environment { SURGE = credentials('halkeye-surge') }
+      steps { sh 'SURGE_LOGIN=$SURGE_USR SURGE_TOKEN=$SURGE_PSW npx surge -p docs/build -d flask-atlassian-connect.surge.sh' }
+    }
+
+    stage('Deploy Docs (Github)') {
+      when { branch 'master' }
+      environment {
+        GITHUB = credentials('github-halkeye')
+        DEPLOY_DIRECTORY = 'docs/build'
+        DEPLOY_BRANCH = 'gh-pages'
+      }
       steps {
-        sh 'SURGE_LOGIN=$SURGE_USR SURGE_TOKEN=$SURGE_PSW npx surge -p docs -d flask-atlassian-connect.surge.sh'
+        sh "git worktree add -B ${env.DEPLOY_BRANCH} ${env.DEPLOY_DIRECTORY} origin/${env.DEPLOY_BRANCH}"
+        sh "rm -rf ${env.DEPLOY_DIRECTORY}/*"
+
+        dir(env.DEPLOY_DIRECTORY) {
+          sh 'git add --all && git commit -m "Publishing to gh-pages"'
+          newUrl = env.GIT_URL.replace("https://", "https://${GITHUB_USR}:${GITHUB_PSW}@");
+          sh "git remote add deploy ${newUrl}"
+          sh "git push deploy"
+          sh "git remote remove deploy"
+        }
       }
     }
   }
