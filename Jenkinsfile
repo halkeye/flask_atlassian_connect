@@ -57,6 +57,9 @@ pipeline {
         sh "cp -a ${env.DEPLOY_DIRECTORY}/* ${env.DEPLOY_BRANCH}/"
 
         dir(env.DEPLOY_BRANCH) {
+          sh 'git config --global user.email "jenkins@gavinmogan.com"'
+            sh 'git config --global user.name "Jenkins"'
+            sh 'git config --global push.default simple'
           sh 'git add --all && git commit -m "Publishing to gh-pages"'
           sh "git push"
         }
