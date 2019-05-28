@@ -7,7 +7,7 @@ pipeline {
 
   options {
     timeout(time: 10, unit: 'MINUTES')
-      ansiColor('xterm')
+    ansiColor('xterm')
   }
 
   stages {
@@ -21,7 +21,6 @@ pipeline {
           """
       }
     }
-  stages {
     stage('Install') {
       steps {
         sh """
