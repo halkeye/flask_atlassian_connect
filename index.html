@@ -92,7 +92,7 @@ to get to your atlassian connect descriptor file.</p>
 <h3>Configuration<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="flask_atlassian_connect.AtlassianConnect">
-<em class="property">class </em><code class="descclassname">flask_atlassian_connect.</code><code class="descname">AtlassianConnect</code><span class="sig-paren">(</span><em>app=None</em>, <em>client_class=&lt;class 'flask_atlassian_connect.client.AtlassianConnectClient'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#flask_atlassian_connect.AtlassianConnect" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">flask_atlassian_connect.</code><code class="sig-name descname">AtlassianConnect</code><span class="sig-paren">(</span><em class="sig-param">app=None</em>, <em class="sig-param">client_class=&lt;class 'flask_atlassian_connect.client.AtlassianConnectClient'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#flask_atlassian_connect.AtlassianConnect" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class is used to make creating an Atlassian Connect based
 addon a lot simplier and more straight forward. It takes care of all
 the authentication and authorization for you.</p>
@@ -100,7 +100,7 @@ the authentication and authorization for you.</p>
 contains load(id) and save(client) methods.</p>
 <dl class="method">
 <dt id="flask_atlassian_connect.AtlassianConnect.init_app">
-<code class="descname">init_app</code><span class="sig-paren">(</span><em>app</em><span class="sig-paren">)</span><a class="headerlink" href="#flask_atlassian_connect.AtlassianConnect.init_app" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">init_app</code><span class="sig-paren">(</span><em class="sig-param">app</em><span class="sig-paren">)</span><a class="headerlink" href="#flask_atlassian_connect.AtlassianConnect.init_app" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize Application object stuff</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -111,7 +111,7 @@ contains load(id) and save(client) methods.</p>
 
 <dl class="method">
 <dt id="flask_atlassian_connect.AtlassianConnect.lifecycle">
-<code class="descname">lifecycle</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#flask_atlassian_connect.AtlassianConnect.lifecycle" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">lifecycle</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#flask_atlassian_connect.AtlassianConnect.lifecycle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Lifecycle decorator. See <a class="reference external" href="https://developer.atlassian.com/static/connect/docs/beta/modules/lifecycle.html">external lifecycle</a> documentation</p>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@ac</span><span class="o">.</span><span class="n">lifecycle</span><span class="p">(</span><span class="s2">&quot;installed&quot;</span><span class="p">)</span>
@@ -155,7 +155,7 @@ contains load(id) and save(client) methods.</p>
 
 <dl class="method">
 <dt id="flask_atlassian_connect.AtlassianConnect.module">
-<code class="descname">module</code><span class="sig-paren">(</span><em>key</em>, <em>name=None</em>, <em>location=None</em><span class="sig-paren">)</span><a class="headerlink" href="#flask_atlassian_connect.AtlassianConnect.module" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">module</code><span class="sig-paren">(</span><em class="sig-param">key</em>, <em class="sig-param">name=None</em>, <em class="sig-param">location=None</em><span class="sig-paren">)</span><a class="headerlink" href="#flask_atlassian_connect.AtlassianConnect.module" title="Permalink to this definition">¶</a></dt>
 <dd><p>Module decorator. See <a class="reference external" href="https://developer.atlassian.com/static/connect/docs/beta/modules/common/web-section.html">external modules</a> documentation</p>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@ac</span><span class="o">.</span><span class="n">module</span><span class="p">(</span><span class="s2">&quot;configurePage&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Configure&quot;</span><span class="p">)</span>
@@ -185,7 +185,7 @@ the UI.</p></li>
 
 <dl class="method">
 <dt id="flask_atlassian_connect.AtlassianConnect.tasks">
-<code class="descname">tasks</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flask_atlassian_connect.AtlassianConnect.tasks" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">tasks</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flask_atlassian_connect.AtlassianConnect.tasks" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function that turns a collection of tasks
 suitable for <a class="reference external" href="http://www.pyinvoke.org/">pyinvoke</a></p>
 <p>Example:</p>
@@ -198,7 +198,7 @@ suitable for <a class="reference external" href="http://www.pyinvoke.org/">pyinv
 
 <dl class="method">
 <dt id="flask_atlassian_connect.AtlassianConnect.webhook">
-<code class="descname">webhook</code><span class="sig-paren">(</span><em>event</em>, <em>exclude_body=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#flask_atlassian_connect.AtlassianConnect.webhook" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">webhook</code><span class="sig-paren">(</span><em class="sig-param">event</em>, <em class="sig-param">exclude_body=False</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#flask_atlassian_connect.AtlassianConnect.webhook" title="Permalink to this definition">¶</a></dt>
 <dd><p>Webhook decorator. See <a class="reference external" href="https://developer.atlassian.com/jiradev/jira-apis/webhooks">external webhooks</a> documentation</p>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@ac</span><span class="o">.</span><span class="n">webhook</span><span class="p">(</span><span class="s2">&quot;jira:issue_created&quot;</span><span class="p">)</span>
@@ -226,7 +226,7 @@ If not specified no properties will be returned.</p></li>
 
 <dl class="method">
 <dt id="flask_atlassian_connect.AtlassianConnect.webpanel">
-<code class="descname">webpanel</code><span class="sig-paren">(</span><em>key</em>, <em>name=None</em>, <em>location=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#flask_atlassian_connect.AtlassianConnect.webpanel" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">webpanel</code><span class="sig-paren">(</span><em class="sig-param">key</em>, <em class="sig-param">name=None</em>, <em class="sig-param">location=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#flask_atlassian_connect.AtlassianConnect.webpanel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Webpanel decorator. See <a class="reference external" href="https://developer.atlassian.com/static/connect/docs/beta/modules/common/web-panel.html">external webpanel</a> documentation</p>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@ac</span><span class="o">.</span><span class="n">webpanel</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;userPanel&quot;</span><span class="p">,</span>
@@ -268,7 +268,7 @@ the UI.</p></li>
 <h3>Fallback Client Model<a class="headerlink" href="#fallback-client-model" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="flask_atlassian_connect.AtlassianConnectClient">
-<em class="property">class </em><code class="descclassname">flask_atlassian_connect.</code><code class="descname">AtlassianConnectClient</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#flask_atlassian_connect.AtlassianConnectClient" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">flask_atlassian_connect.</code><code class="sig-name descname">AtlassianConnectClient</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#flask_atlassian_connect.AtlassianConnectClient" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reference implementation of Client object</p>
 <dl class="field-list simple">
 <dt class="field-odd">Variables</dt>
@@ -279,9 +279,9 @@ the UI.</p></li>
 </ul>
 </dd>
 </dl>
-<dl class="staticmethod">
+<dl class="method">
 <dt id="flask_atlassian_connect.AtlassianConnectClient.all">
-<em class="property">static </em><code class="descname">all</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flask_atlassian_connect.AtlassianConnectClient.all" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">all</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flask_atlassian_connect.AtlassianConnectClient.all" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a list of all clients stored in the database</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -293,9 +293,9 @@ the UI.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="flask_atlassian_connect.AtlassianConnectClient.delete">
-<em class="property">static </em><code class="descname">delete</code><span class="sig-paren">(</span><em>client_key</em><span class="sig-paren">)</span><a class="headerlink" href="#flask_atlassian_connect.AtlassianConnectClient.delete" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">delete</code><span class="sig-paren">(</span><em class="sig-param">client_key</em><span class="sig-paren">)</span><a class="headerlink" href="#flask_atlassian_connect.AtlassianConnectClient.delete" title="Permalink to this definition">¶</a></dt>
 <dd><p>Removes a client from the database</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -304,9 +304,9 @@ the UI.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="flask_atlassian_connect.AtlassianConnectClient.load">
-<em class="property">static </em><code class="descname">load</code><span class="sig-paren">(</span><em>client_key</em><span class="sig-paren">)</span><a class="headerlink" href="#flask_atlassian_connect.AtlassianConnectClient.load" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param">client_key</em><span class="sig-paren">)</span><a class="headerlink" href="#flask_atlassian_connect.AtlassianConnectClient.load" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads a Client from the (internal) database</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -318,9 +318,9 @@ the UI.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="flask_atlassian_connect.AtlassianConnectClient.save">
-<em class="property">static </em><code class="descname">save</code><span class="sig-paren">(</span><em>client</em><span class="sig-paren">)</span><a class="headerlink" href="#flask_atlassian_connect.AtlassianConnectClient.save" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">client</em><span class="sig-paren">)</span><a class="headerlink" href="#flask_atlassian_connect.AtlassianConnectClient.save" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save a client to the database</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
