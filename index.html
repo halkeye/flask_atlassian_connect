@@ -52,7 +52,7 @@ Tell it where to save/load installation info from, and the rest are simple decor
 <span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 <span class="n">ac</span> <span class="o">=</span> <span class="n">AtlassianConnect</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
 
-<span class="nd">@ac.webhook</span><span class="p">(</span><span class="s1">&#39;jira:issue_created&#39;</span><span class="p">)</span>
+<span class="nd">@ac</span><span class="o">.</span><span class="n">webhook</span><span class="p">(</span><span class="s1">&#39;jira:issue_created&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">handle_jira_issue_created</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
     <span class="k">pass</span>
 
@@ -189,7 +189,7 @@ the UI.</p></li>
 <dd><p>Function that turns a collection of tasks
 suitable for <a class="reference external" href="http://www.pyinvoke.org/">pyinvoke</a></p>
 <p>Example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">app.web</span> <span class="k">import</span> <span class="n">ac</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">app.web</span> <span class="kn">import</span> <span class="n">ac</span>
 <span class="n">ns</span> <span class="o">=</span> <span class="n">Collection</span><span class="p">()</span>
 <span class="n">ns</span><span class="o">.</span><span class="n">add_collection</span><span class="p">(</span><span class="n">ac</span><span class="o">.</span><span class="n">tasks</span><span class="p">())</span>
 </pre></div>
