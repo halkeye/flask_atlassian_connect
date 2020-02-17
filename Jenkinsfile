@@ -80,6 +80,9 @@ pipeline {
         DEPLOY_BRANCH = 'gh-pages'
       }
       steps {
+        sh 'git config --global user.email "jenkins@gavinmogan.com"'
+        sh 'git config --global user.name "Jenkins"'
+        sh 'git config --global push.default simple'
         sh "git clone --single-branch --branch ${env.DEPLOY_BRANCH} ${env.GIT_URL.replace("https://", "https://${GITHUB_USR}:${GITHUB_PSW}@")} ${env.DEPLOY_BRANCH}"
         sh "rm -rf ${env.DEPLOY_BRANCH}/*"
         sh "cp -a ${env.DEPLOY_DIRECTORY}/* ${env.DEPLOY_BRANCH}/"
