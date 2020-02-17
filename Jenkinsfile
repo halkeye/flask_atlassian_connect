@@ -78,6 +78,7 @@ pipeline {
         GITHUB = credentials('github-halkeye')
         DEPLOY_DIRECTORY = 'docs/build'
         DEPLOY_BRANCH = 'gh-pages'
+        HOME = "${env.WORKSPACE}"
       }
       steps {
         sh 'git config --global user.email "jenkins@gavinmogan.com"'
