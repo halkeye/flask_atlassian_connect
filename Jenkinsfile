@@ -65,7 +65,10 @@ pipeline {
 
     stage('Docs') {
       steps {
-        sh "invoke docs"
+        sh """
+          . venv/bin/activate
+          invoke docs
+        """
       }
     }
 
