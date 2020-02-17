@@ -14,6 +14,8 @@ pipeline {
     stage('Before Install') {
       steps {
         sh """
+          python -m venv venv
+          . venv/bin/activate
           pip install --upgrade pip
           pip install --upgrade setuptools
           pip install --upgrade pytest
@@ -25,6 +27,7 @@ pipeline {
     stage('Install') {
       steps {
         sh """
+          . venv/bin/activate
           python setup.py -q install
           python setup.py sdist
           pip install -r requirements/dev.txt
@@ -34,7 +37,10 @@ pipeline {
 
     stage('Test') {
       steps {
-        sh 'py.test  --junitxml=pytest-report.xml --cov-report xml --cov --cov-report term-missing'
+        sh """
+          . venv/bin/activate
+          py.test  --junitxml=pytest-report.xml --cov-report xml --cov --cov-report term-missing
+        """
       }
       post {
         always {
@@ -45,7 +51,10 @@ pipeline {
 
     stage('Coverage') {
       steps {
-        sh 'coverage xml -i'
+        sh """
+          . venv/bin/activate
+          coverage xml -i
+        """
       }
       post {
         always {
